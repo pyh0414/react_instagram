@@ -2,9 +2,7 @@ import produce from "immer";
 
 export const initialState = {
   user: null,
-  signUpFailReason: "",
-  isSignedUpSuccess: false,
-  isSigningUp: false
+  isSignedUpSuccess: false
 };
 
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
@@ -16,19 +14,17 @@ export default (state = initialState, action) => {
     switch (action.type) {
       case SIGN_UP_REQUEST: {
         (draft.isSigningUp = false),
-          (draft.isSigningUp = true),
-          (draft.signUpFailReason = "");
+          (draft.isSignedUpSuccess = false),
+          (draft.isSigningUp = true);
         break;
       }
       case SIGN_UP_SUCCESS: {
         (draft.isSigningUp = false), (draft.isSignedUpSuccess = true);
-        draft.signUpFailReason = "";
+
         break;
       }
       case SIGN_UP_FAILURE: {
-        (draft.isSigningUp = false),
-          (draft.isSignedUpSuccess = false),
-          (draft.signUpFailReason = action.data);
+        (draft.isSigningUp = false), (draft.isSignedUpSuccess = false);
         break;
       }
     }
