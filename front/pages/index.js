@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import { Col, Input, Form, Icon, Button } from "antd";
+import Router from "next/router";
+import { Input, Form, Icon, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
-import { SIGN_UP_REQUEST } from "../reducer/user";
+import { LOG_IN_REQUEST } from "../reducer/user";
 
 const Wrapper = styled.div`
   height: 70vh;
@@ -18,16 +19,14 @@ const CustomForm = styled(Form)`
 
 const SignUp = ({ children }) => {
   const [id, setChangeId] = useState("");
-  const [name, setChangeName] = useState("");
   const [password, setChangePassword] = useState("");
-  const [passwordCheck, setChangePasswordCheck] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
 
   const dispatch = useDispatch();
-  const { isUserIdDuplicated, isSignedUpSuccess } = useSelector(
-    state => state.user
-  );
+  const { user } = useSelector(state => state.user);
 
+  if (user) {
+    Router.push("/home");
+  }
   const onChangeId = e => {
     setChangeId(e.target.value);
   };
@@ -38,15 +37,11 @@ const SignUp = ({ children }) => {
 
   const onSubmitForm = e => {
     e.preventDefault();
-    if (password !== passwordCheck) {
-      return setPasswordError(true);
-    }
     dispatch({
-      type: SIGN_UP_REQUEST,
+      type: LOG_IN_REQUEST,
       data: {
         id,
-        password,
-        name
+        password
       }
     });
   };
