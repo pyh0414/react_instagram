@@ -6,7 +6,7 @@ import { applyMiddleware, compose, createStore } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 
-import AppLayout from "../components/AppLayout";
+// import SignIn from ".";
 import reducer from "../reducer";
 import rootSaga from "../sagas";
 
@@ -21,9 +21,7 @@ const Instagram = ({ Component, store }) => {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.js" />
       </Head>
       <Container>
-        <AppLayout>
-          <Component />
-        </AppLayout>
+        <Component />
       </Container>
     </Provider>
   );
