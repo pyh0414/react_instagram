@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import Router from "next/router";
 import { Input, Form, Icon, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
