@@ -6,7 +6,7 @@ const passport = require("passport");
 const expressSession = require("express-session");
 const dotenv = require("dotenv");
 
-// const userAPIRouter = require("./routes/user");
+const userRouter = require("./routes/user");
 
 const db = require("./models");
 db.sequelize.sync();
@@ -39,6 +39,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.listen(3000, () => {
+app.use("/user", userRouter);
+
+app.listen(3060, () => {
   console.log("server is running on 3000");
 });

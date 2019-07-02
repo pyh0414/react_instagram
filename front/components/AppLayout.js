@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row } from "antd";
 import styled from "styled-components";
 
-import Header from "../containers/header";
+import Header from "../containers/Header";
 
 const AppLayoutWrapper = styled.div`
   background-color: #fafafa;
@@ -21,15 +21,11 @@ const AppLayout = ({ children }) => {
         <Header />
         <AppLayoutWrapper>
           <Row>
-            <Col xs={2} md={6}>
-              6
-            </Col>
+            <Col xs={2} md={6} />
             <Col xs={4} md={12}>
-              <children />
+              {children}
             </Col>
-            <Col xs={2} md={6}>
-              6
-            </Col>
+            <Col xs={2} md={6} />
           </Row>
         </AppLayoutWrapper>
       </>
