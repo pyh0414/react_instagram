@@ -8,9 +8,10 @@ const dotenv = require("dotenv");
 
 const userRouter = require("./routes/user");
 
+const passportConfig = require("./passport");
 const db = require("./models");
-db.sequelize.sync();
 
+db.sequelize.sync();
 dotenv.config();
 
 const app = express();
@@ -38,6 +39,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+passportConfig();
 
 app.use("/user", userRouter);
 
