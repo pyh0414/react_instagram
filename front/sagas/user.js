@@ -1,13 +1,4 @@
-import {
-  all,
-  fork,
-  takeLatest,
-  takeEvery,
-  call,
-  put,
-  take,
-  delay
-} from "redux-saga/effects";
+import { all, fork, takeEvery, call, put } from "redux-saga/effects";
 import axios from "axios";
 
 import {
@@ -22,7 +13,6 @@ function signUpAPI(data) {
 
 function* signUp(action) {
   try {
-    yield call(signUpAPI, action.data);
     yield put({
       type: SIGN_UP_SUCCESS
     });
