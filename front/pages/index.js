@@ -24,9 +24,10 @@ const SignUp = ({ children }) => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.user);
 
-  if (user) {
-    Router.push("/home");
-  }
+  useEffect(() => {
+    user && Router.push("/home");
+  }, user);
+
   const onChangeId = e => {
     setChangeId(e.target.value);
   };
