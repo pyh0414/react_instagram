@@ -7,7 +7,10 @@ import {
   SIGN_UP_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
-  LOG_IN_FAILURE
+  LOG_IN_FAILURE,
+  ID_CHECK_REQUEST,
+  ID_CHECK_SUCCESS,
+  ID_CHECK_FAILURE
 } from "../reducer/user";
 
 function signUpAPI(data) {
@@ -43,7 +46,6 @@ function logInAPI(data) {
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data);
-    console.log(result);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data
@@ -61,7 +63,30 @@ function* watchLogIn() {
 }
 
 //-------------------------------------------------------
+function idCheckAPI(data) {
+  return axios.get(`/user/check?userId=${data.id}`);
+}
+
+function* idCheck(action) {
+  try {
+    yield call(idCheckAPI, action.data);
+    yield put({
+      type: ID_CHECK_SUCCESS // 중복된 아이디가 발견된 경우
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: ID_CHECK_FAILURE // 중복된 아이디가 발견되지 않은 경우
+    });
+  }
+}
+
+function* watchIdCheck() {
+  yield takeEvery(ID_CHECK_REQUEST, idCheck);
+}
+
+//-------------------------------------------------------
 
 export default function* userSage() {
-  yield all([fork(watchSignUp), fork(watchLogIn)]);
+  yield all([fork(watchSignUp), fork(watchLogIn), fork(watchIdCheck)]);
 }

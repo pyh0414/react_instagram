@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import { Input, Form, Icon, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
-import { SIGN_UP_REQUEST } from "../reducer/user";
+import { SIGN_UP_REQUEST, ID_CHECK_REQUEST } from "../reducer/user";
 
 const Wrapper = styled.div`
   height: 70vh;
   display: flex;
 `;
 
-const CustomForm = styled(Form)`
+const FormCustom = styled(Form)`
   display: block;
   margin: auto;
   width: 25%;
+`;
+
+const IdCheckButtonCustom = styled(Button)`
+  margin-top: 5px;
 `;
 
 const SignUp = () => {
@@ -23,12 +27,10 @@ const SignUp = () => {
   const [password, setChangePassword] = useState("");
   const [passwordCheck, setChangePasswordCheck] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  const [idCheck, setChangeIdCheck] = useState(true);
 
   const dispatch = useDispatch();
-  const { isUserIdDuplicated, isSignedUpSuccess } = useSelector(
-    state => state.user
-  );
+  const { idCheck, isSignedUpSuccess } = useSelector(state => state.user);
+  const imageInput = useRef();
 
   const onChangeId = e => {
     setChangeId(e.target.value);
@@ -46,24 +48,44 @@ const SignUp = () => {
     setChangePasswordCheck(e.target.value);
   };
 
-  const onSubmitForm = e => {
-    e.preventDefault();
-    if (password !== passwordCheck) {
-      return setPasswordError(true);
-    }
+  const onSubmitForm = useCallback(
+    e => {
+      e.preventDefault();
+      if (password !== passwordCheck) {
+        return setPasswordError(true);
+      }
+      dispatch({
+        type: SIGN_UP_REQUEST,
+        data: {
+          id,
+          password,
+          name
+        }
+      });
+    },
+    [id, password, name]
+  );
+
+  const onCheckId = useCallback(() => {
     dispatch({
-      type: SIGN_UP_REQUEST,
+      type: ID_CHECK_REQUEST,
       data: {
-        id,
-        password,
-        name
+        id
       }
     });
-  };
+  }, [id]);
+
+  const onClickImageUpload = useCallback(() => {
+    imageInput.current.click();
+  }, [imageInput.current]);
+
+  const onChangeImages = useCallback(e => {
+    const formData = new FormData();
+  });
 
   return (
     <Wrapper>
-      <CustomForm onSubmit={onSubmitForm}>
+      <FormCustom encType="multipart/form-data" onSubmit={onSubmitForm}>
         <label htmlFor="user-id">아이디</label>
         <br />
         <Input
@@ -73,6 +95,10 @@ const SignUp = () => {
           required
           prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
         />
+
+        <IdCheckButtonCustom type="danger" onClick={onCheckId}>
+          중복확인
+        </IdCheckButtonCustom>
         {idCheck && "중복된 아이디 입니다"}
 
         <br />
@@ -119,7 +145,20 @@ const SignUp = () => {
         {passwordError && (
           <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</div>
         )}
+        <div>
+          <label htmlFor="user-profile">프로필 사진</label>
+          <input
+            type="file"
+            ref={imageInput}
+            multiple
+            hidden
+            onChange={onChangeImages}
+          />
+          <Button onClick={onClickImageUpload}>이미지 업로드</Button>
+          <br />
+        </div>
         <br />
+
         <Button
           type="primary"
           htmlType="submit"
@@ -133,7 +172,7 @@ const SignUp = () => {
             <a> 뒤로가기</a>
           </Link>
         </Button>
-      </CustomForm>
+      </FormCustom>
     </Wrapper>
   );
 };
