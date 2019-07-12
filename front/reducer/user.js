@@ -3,7 +3,8 @@ import produce from "immer";
 export const initialState = {
   user: null,
   isSignedUpSuccess: false,
-  idCheck: false,
+  hasIdChecked: false,
+  isExistingId: false,
   profileImage: ""
 };
 
@@ -15,9 +16,9 @@ export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
 export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS";
 export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
 
-export const ID_CHECK_REQUEST = "ID_CHECEK_REQUEST";
-export const ID_CHECK_SUCCESS = "ID_CHECEK_SUCCESS";
-export const ID_CHECK_FAILURE = "ID_CHECEK_FAILURE";
+export const EXISTING_ID_CHECK_REQUEST = "ID_CHECEK_REQUEST";
+export const EXISTING_ID_CHECK_SUCCESS = "ID_CHECEK_SUCCESS";
+export const EXISTING_ID_CHECK_FAILURE = "ID_CHECEK_FAILURE";
 
 export const UPLOAD_PROFILE_REQUEST = "UPLOAD_PROFILE_REQUEST";
 export const UPLOAD_PROFILE_SUCCESS = "UPLOAD_PROFILE_SUCCESS";
@@ -48,14 +49,14 @@ export default (state = initialState, action) => {
         draft.user = null;
         break;
       }
-      case ID_CHECK_SUCCESS: {
-        // 중복된 아이디가 발견된 경우
-        draft.idCheck = false;
+      case EXISTING_ID_CHECK_SUCCESS: {
+        draft.isExistingId = true;
+        draft.hasIdChecked = true;
         break;
       }
-      case ID_CHECK_FAILURE: {
-        // 중복된 아이디가 발견되지 않은 경우
-        draft.idCheck = true;
+      case EXISTING_ID_CHECK_FAILURE: {
+        draft.isExistingId = false;
+        draft.hasIdChecked = true;
         break;
       }
       case UPLOAD_PROFILE_SUCCESS: {

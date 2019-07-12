@@ -1,12 +1,13 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
+import Router from "next/router";
 import { Input, Form, Icon, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
   SIGN_UP_REQUEST,
-  ID_CHECK_REQUEST,
+  EXISTING_ID_CHECK_REQUEST,
   UPLOAD_PROFILE_REQUEST
 } from "../reducer/user";
 
@@ -37,8 +38,18 @@ const SignUp = () => {
   const [passwordCheck, setChangePasswordCheck] = useState("");
   const [passwordError, setPasswordError] = useState(false);
 
+  useEffect(() => {
+    isSignedUpSuccess && Router.push("/");
+  }, [isSignedUpSuccess]);
+
   const dispatch = useDispatch();
-  const { idCheck, profileImage } = useSelector(state => state.user);
+  const {
+    isExistingId,
+    profileImage,
+    isSignedUpSuccess,
+    hasIdChecked
+  } = useSelector(state => state.user);
+
   const imageInput = useRef();
 
   const onChangeId = e => {
@@ -68,16 +79,17 @@ const SignUp = () => {
         data: {
           id,
           password,
-          name
+          name,
+          profileImage
         }
       });
     },
-    [id, password, name]
+    [id, password, name, profileImage]
   );
 
-  const onCheckId = useCallback(() => {
+  const onExistingIdCheck = useCallback(() => {
     dispatch({
-      type: ID_CHECK_REQUEST,
+      type: EXISTING_ID_CHECK_REQUEST,
       data: {
         id
       }
@@ -111,10 +123,11 @@ const SignUp = () => {
           prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
         />
 
-        <IdCheckButtonCustom type="danger" onClick={onCheckId}>
+        <IdCheckButtonCustom type="danger" onClick={onExistingIdCheck}>
           중복확인
         </IdCheckButtonCustom>
-        {idCheck && "중복된 아이디 입니다"}
+        {hasIdChecked &&
+          (isExistingId ? "중복된 아이디 입니다" : "사용가능한 아이디 입니다.")}
 
         <br />
 
@@ -182,7 +195,7 @@ const SignUp = () => {
           htmlType="submit"
           style={{ width: "40%", marginRight: "20%" }}
         >
-          가입
+          제출
         </Button>
 
         <Button type="Default" style={{ width: "40%" }}>

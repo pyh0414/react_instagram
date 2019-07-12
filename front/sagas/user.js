@@ -8,9 +8,9 @@ import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
-  ID_CHECK_REQUEST,
-  ID_CHECK_SUCCESS,
-  ID_CHECK_FAILURE,
+  EXISTING_ID_CHECK_REQUEST,
+  EXISTING_ID_CHECK_SUCCESS,
+  EXISTING_ID_CHECK_FAILURE,
   UPLOAD_PROFILE_REQUEST,
   UPLOAD_PROFILE_FAILURE,
   UPLOAD_PROFILE_SUCCESS
@@ -72,20 +72,23 @@ function idCheckAPI(data) {
 
 function* idCheck(action) {
   try {
-    yield call(idCheckAPI, action.data);
-    yield put({
-      type: ID_CHECK_SUCCESS // 중복된 아이디가 발견된 경우
-    });
+    const result = yield call(idCheckAPI, action.data);
+    if (result.data) {
+      yield put({
+        type: EXISTING_ID_CHECK_SUCCESS // 중복된 아이디가 발견된 경우
+      });
+    } else {
+      yield put({
+        type: EXISTING_ID_CHECK_FAILURE // 중복된 아이디가 발견된 경우
+      });
+    }
   } catch (err) {
     console.error(err);
-    yield put({
-      type: ID_CHECK_FAILURE // 중복된 아이디가 발견되지 않은 경우
-    });
   }
 }
 
 function* watchIdCheck() {
-  yield takeEvery(ID_CHECK_REQUEST, idCheck);
+  yield takeEvery(EXISTING_ID_CHECK_REQUEST, idCheck);
 }
 
 //-------------------------------------------------------
@@ -96,7 +99,7 @@ function uploadProfileAPI(data) {
 function* uploadProfile(action) {
   try {
     const result = yield call(uploadProfileAPI, action.data);
-    console.log(result);
+
     yield put({
       type: UPLOAD_PROFILE_SUCCESS,
       data: result.data

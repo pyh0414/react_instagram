@@ -21,7 +21,7 @@ const upload = multer({
 });
 
 router.post("/", async (req, res, next) => {
-  const { id, password, name } = req.body;
+  const { id, password, name, profileImage } = req.body;
   try {
     const exUser = await db.User.findOne({
       where: {
@@ -36,7 +36,8 @@ router.post("/", async (req, res, next) => {
     const newUser = await db.User.create({
       userId: id,
       userPw: encodedPasspord,
-      name
+      name,
+      profile: profileImage
     });
     return res.status(200).json(newUser);
   } catch (err) {
@@ -77,9 +78,9 @@ router.get("/check", async (req, res, next) => {
       }
     });
     if (exUser) {
-      return res.status(403).send("중복된 아이디 입니다");
+      return res.status(200).json(exUser);
     }
-    return res.status(200).send("가입되었습니다");
+    return res.status(204).json(null);
   } catch (err) {
     console.error(err);
     return next(err);
