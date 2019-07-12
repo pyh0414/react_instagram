@@ -4,7 +4,11 @@ import styled from "styled-components";
 import { Input, Form, Icon, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
-import { SIGN_UP_REQUEST, ID_CHECK_REQUEST } from "../reducer/user";
+import {
+  SIGN_UP_REQUEST,
+  ID_CHECK_REQUEST,
+  UPLOAD_PROFILE_REQUEST
+} from "../reducer/user";
 
 const Wrapper = styled.div`
   height: 70vh;
@@ -21,6 +25,11 @@ const IdCheckButtonCustom = styled(Button)`
   margin-top: 5px;
 `;
 
+const ImageCustom = styled.img`
+  width: 400px;
+  height: 400px;
+`;
+
 const SignUp = () => {
   const [id, setChangeId] = useState("");
   const [name, setChangeName] = useState("");
@@ -29,7 +38,7 @@ const SignUp = () => {
   const [passwordError, setPasswordError] = useState(false);
 
   const dispatch = useDispatch();
-  const { idCheck, isSignedUpSuccess } = useSelector(state => state.user);
+  const { idCheck, profileImage } = useSelector(state => state.user);
   const imageInput = useRef();
 
   const onChangeId = e => {
@@ -80,8 +89,14 @@ const SignUp = () => {
   }, [imageInput.current]);
 
   const onChangeImages = useCallback(e => {
-    const formData = new FormData();
-  });
+    const imgFormData = new FormData();
+    imgFormData.append("image", e.target.files[0]);
+
+    dispatch({
+      type: UPLOAD_PROFILE_REQUEST,
+      data: imgFormData
+    });
+  }, []);
 
   return (
     <Wrapper>
@@ -156,6 +171,9 @@ const SignUp = () => {
           />
           <Button onClick={onClickImageUpload}>이미지 업로드</Button>
           <br />
+          {profileImage && (
+            <ImageCustom src={`http://localhost:3060/${profileImage}`} />
+          )}
         </div>
         <br />
 

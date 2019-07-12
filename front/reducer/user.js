@@ -3,7 +3,8 @@ import produce from "immer";
 export const initialState = {
   user: null,
   isSignedUpSuccess: false,
-  idCheck: false
+  idCheck: false,
+  profileImage: ""
 };
 
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
@@ -17,6 +18,10 @@ export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
 export const ID_CHECK_REQUEST = "ID_CHECEK_REQUEST";
 export const ID_CHECK_SUCCESS = "ID_CHECEK_SUCCESS";
 export const ID_CHECK_FAILURE = "ID_CHECEK_FAILURE";
+
+export const UPLOAD_PROFILE_REQUEST = "UPLOAD_PROFILE_REQUEST";
+export const UPLOAD_PROFILE_SUCCESS = "UPLOAD_PROFILE_SUCCESS";
+export const UPLOAD_PROFILE_FAILURE = "UPLOAD_PROFILE_FAILURE";
 
 export default (state = initialState, action) => {
   return produce(state, draft => {
@@ -51,6 +56,14 @@ export default (state = initialState, action) => {
       case ID_CHECK_FAILURE: {
         // 중복된 아이디가 발견되지 않은 경우
         draft.idCheck = true;
+        break;
+      }
+      case UPLOAD_PROFILE_SUCCESS: {
+        draft.profileImage = action.data;
+        break;
+      }
+      case UPLOAD_PROFILE_SUCCESS: {
+        draft.profileImage = "";
         break;
       }
     }

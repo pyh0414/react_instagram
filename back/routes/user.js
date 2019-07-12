@@ -1,9 +1,24 @@
 const express = require("express");
 const brcypt = require("bcrypt");
-const router = express.Router();
 const passport = require("passport");
+const multer = require("multer");
 
+const router = express.Router();
 const db = require("../models");
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function(req, file, done) {
+      done(null, "uploads/");
+    },
+    filename: function(req, file, done) {
+      const fileName = file.originalname.replace(/ /gi, ""); // 공백제거
+      const extension = fileName.slice(-4); // 확장자
+      const baseName = fileName.slice(0, -4); // 확장자 제거된 파일명
+      done(null, baseName + new Date().valueOf() + extension);
+    }
+  })
+});
 
 router.post("/", async (req, res, next) => {
   const { id, password, name } = req.body;
@@ -52,6 +67,28 @@ router.post("/login", async (req, res, next) => {
       }
     });
   })(req, res, next);
+});
+
+router.get("/check", async (req, res, next) => {
+  try {
+    const exUser = await db.User.findOne({
+      where: {
+        userId: req.query.userId
+      }
+    });
+    if (exUser) {
+      return res.status(403).send("중복된 아이디 입니다");
+    }
+    return res.status(200).send("가입되었습니다");
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
+});
+
+router.post("/image", upload.single("image"), (req, res) => {
+  console.log(req.file);
+  res.json(req.file.filename);
 });
 
 module.exports = router;

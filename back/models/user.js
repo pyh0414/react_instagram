@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       userPw: {
         type: DataTypes.STRING(100), // 100글자 이하
         allowNull: false
+      },
+      profile: {
+        type: DataTypes.STRING(200),
+        allowNull: false
       }
     },
     {

@@ -10,7 +10,10 @@ import {
   LOG_IN_FAILURE,
   ID_CHECK_REQUEST,
   ID_CHECK_SUCCESS,
-  ID_CHECK_FAILURE
+  ID_CHECK_FAILURE,
+  UPLOAD_PROFILE_REQUEST,
+  UPLOAD_PROFILE_FAILURE,
+  UPLOAD_PROFILE_SUCCESS
 } from "../reducer/user";
 
 function signUpAPI(data) {
@@ -86,7 +89,37 @@ function* watchIdCheck() {
 }
 
 //-------------------------------------------------------
+function uploadProfileAPI(data) {
+  return axios.post("/user/image", data);
+}
+
+function* uploadProfile(action) {
+  try {
+    const result = yield call(uploadProfileAPI, action.data);
+    console.log(result);
+    yield put({
+      type: UPLOAD_PROFILE_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPLOAD_PROFILE_FAILURE
+    });
+  }
+}
+
+function* watchUploadImage() {
+  yield takeEvery(UPLOAD_PROFILE_REQUEST, uploadProfile);
+}
+
+//-------------------------------------------------------
 
 export default function* userSage() {
-  yield all([fork(watchSignUp), fork(watchLogIn), fork(watchIdCheck)]);
+  yield all([
+    fork(watchSignUp),
+    fork(watchLogIn),
+    fork(watchIdCheck),
+    fork(watchUploadImage)
+  ]);
 }
