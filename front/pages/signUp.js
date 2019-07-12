@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import Router from "next/router";
-import { Input, Form, Icon, Button } from "antd";
+import { Input, Form, Icon, Button, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -19,7 +19,12 @@ const Wrapper = styled.div`
 const FormCustom = styled(Form)`
   display: block;
   margin: auto;
-  width: 25%;
+  width: 22%;
+`;
+
+const Foot = styled.div`
+  text-align: center;
+  margin-top: 20px;
 `;
 
 const IdCheckButtonCustom = styled(Button)`
@@ -38,10 +43,6 @@ const SignUp = () => {
   const [passwordCheck, setChangePasswordCheck] = useState("");
   const [passwordError, setPasswordError] = useState(false);
 
-  useEffect(() => {
-    isSignedUpSuccess && Router.push("/");
-  }, [isSignedUpSuccess]);
-
   const dispatch = useDispatch();
   const {
     isExistingId,
@@ -49,6 +50,13 @@ const SignUp = () => {
     isSignedUpSuccess,
     hasIdChecked
   } = useSelector(state => state.user);
+
+  useEffect(() => {
+    if (isSignedUpSuccess) {
+      alert("로그인 페이지로 이동합니다.");
+      Router.push("/");
+    }
+  }, [isSignedUpSuccess]);
 
   const imageInput = useRef();
 
@@ -110,45 +118,59 @@ const SignUp = () => {
     });
   }, []);
 
+  const props = {
+    name: "file",
+    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    headers: {
+      authorization: "authorization-text"
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    }
+  };
+
   return (
     <Wrapper>
       <FormCustom encType="multipart/form-data" onSubmit={onSubmitForm}>
-        <label htmlFor="user-id">아이디</label>
         <br />
         <Input
           name="user-id"
+          placeholder="이메일"
           value={id}
           onChange={onChangeId}
           required
-          prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+          prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
         />
-
         <IdCheckButtonCustom type="danger" onClick={onExistingIdCheck}>
           중복확인
         </IdCheckButtonCustom>
         {hasIdChecked &&
           (isExistingId ? "중복된 아이디 입니다" : "사용가능한 아이디 입니다.")}
-
         <br />
-
         <div>
-          <label htmlFor="user-id">이름</label>
           <br />
           <Input
             name="user-id"
+            placeholder="이름"
             value={name}
             onChange={onChangeName}
             required
             prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
           />
-          <br />
         </div>
         <div>
-          <label htmlFor="user-password">비밀번호</label>
           <br />
 
           <Input
             name="user-password"
+            placeholder="비밀번호"
             value={password}
             onChange={onChangePassword}
             required
@@ -156,12 +178,12 @@ const SignUp = () => {
             type="password"
           />
           <br />
+          <br />
         </div>
         <div>
-          <label htmlFor="user-password">비밀번호확인</label>
-          <br />
           <Input
             name="user-password-check"
+            placeholder="비밀번호확인"
             value={passwordCheck}
             onChange={onChangePasswordCheck}
             required
@@ -169,12 +191,10 @@ const SignUp = () => {
             type="password"
           />
         </div>
-
         {passwordError && (
           <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</div>
         )}
         <div>
-          <label htmlFor="user-profile">프로필 사진</label>
           <input
             type="file"
             ref={imageInput}
@@ -182,27 +202,29 @@ const SignUp = () => {
             hidden
             onChange={onChangeImages}
           />
-          <Button onClick={onClickImageUpload}>이미지 업로드</Button>
+          {/* <Button onClick={onClickImageUpload}>이미지 업로드</Button> */}
+          <br />
+          <Upload {...props}>
+            <Button>
+              <Icon type="upload" /> 프로필 업로드
+            </Button>
+          </Upload>
+
           <br />
           {profileImage && (
             <ImageCustom src={`http://localhost:3060/${profileImage}`} />
           )}
         </div>
         <br />
-
-        <Button
-          type="primary"
-          htmlType="submit"
-          style={{ width: "40%", marginRight: "20%" }}
-        >
-          제출
+        <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+          가입하기
         </Button>
-
-        <Button type="Default" style={{ width: "40%" }}>
+        <Foot>
+          이미 가입하셨다면 ?
           <Link href="/">
-            <a> 뒤로가기</a>
+            <a> 로그인</a>
           </Link>
-        </Button>
+        </Foot>
       </FormCustom>
     </Wrapper>
   );

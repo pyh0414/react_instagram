@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 
 const CustomForm = styled(Form)`
   margin: auto;
-  width: 20%;
+  width: 22%;
 `;
 
 const SignUp = ({ children }) => {
@@ -52,24 +52,23 @@ const SignUp = ({ children }) => {
       {children}
       <CustomForm onSubmit={onSubmitForm}>
         <div>
-          <label htmlFor="user-id">아이디</label>
           <br />
 
           <Input
             name="user-id"
+            placeholder="이메일"
             value={id}
             onChange={onChangeId}
             required
-            prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+            prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           />
           <br />
         </div>
         <div>
-          <label htmlFor="user-password">비밀번호</label>
           <br />
-
           <Input
             name="user-password"
+            placeholder="비밀번호"
             value={password}
             onChange={onChangePassword}
             required
