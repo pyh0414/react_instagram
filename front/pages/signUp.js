@@ -32,8 +32,9 @@ const IdCheckButtonCustom = styled(Button)`
 `;
 
 const ImageCustom = styled.img`
-  width: 400px;
-  height: 400px;
+  margin-top: 15px;
+  width: 200px;
+  height: 200px;
 `;
 
 const SignUp = () => {
@@ -53,7 +54,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (isSignedUpSuccess) {
-      alert("로그인 페이지로 이동합니다.");
+      alert("가입되셨습니다. 로그인 페이지로 이동합니다.");
       Router.push("/");
     }
   }, [isSignedUpSuccess]);
@@ -117,24 +118,6 @@ const SignUp = () => {
       data: imgFormData
     });
   }, []);
-
-  const props = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text"
-    },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    }
-  };
 
   return (
     <Wrapper>
@@ -204,13 +187,13 @@ const SignUp = () => {
           />
           {/* <Button onClick={onClickImageUpload}>이미지 업로드</Button> */}
           <br />
-          <Upload {...props}>
-            <Button>
-              <Icon type="upload" /> 프로필 업로드
-            </Button>
-          </Upload>
+
+          <Button onClick={onClickImageUpload}>
+            <Icon type="upload" /> 프로필 업로드
+          </Button>
 
           <br />
+          {profileImage}
           {profileImage && (
             <ImageCustom src={`http://localhost:3060/${profileImage}`} />
           )}

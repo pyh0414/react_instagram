@@ -27,22 +27,20 @@ export const UPLOAD_PROFILE_FAILURE = "UPLOAD_PROFILE_FAILURE";
 export default (state = initialState, action) => {
   return produce(state, draft => {
     switch (action.type) {
-      case SIGN_UP_REQUEST: {
-        (draft.isSigningUp = false),
-          (draft.isSignedUpSuccess = false),
-          (draft.isSigningUp = true);
-        break;
-      }
       case SIGN_UP_SUCCESS: {
-        (draft.isSigningUp = false), (draft.isSignedUpSuccess = true);
+        draft.isSignedUpSuccess = true;
+        draft.hasIdChecked = false;
+        draft.isExistingId = false;
+        draft.profileImage = "";
         break;
       }
       case SIGN_UP_FAILURE: {
-        (draft.isSigningUp = false), (draft.isSignedUpSuccess = false);
+        draft.isSignedUpSuccess = false;
         break;
       }
       case LOG_IN_SUCCESS: {
         draft.user = action.data;
+
         break;
       }
       case LOG_IN_FAILURE: {
