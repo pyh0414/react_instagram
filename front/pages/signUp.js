@@ -97,6 +97,9 @@ const SignUp = () => {
   );
 
   const onExistingIdCheck = useCallback(() => {
+    if (id.trim() == "") {
+      return alert("아이디를 입력해 주세요");
+    }
     dispatch({
       type: EXISTING_ID_CHECK_REQUEST,
       data: {
