@@ -5,7 +5,7 @@ const local = require("./localStrategy");
 module.exports = () => {
   passport.serializeUser((user, done) => {
     console.log("serialzable");
-    return done(null, user.id);
+    return done(null, user.userId);
   });
   passport.deserializeUser(async (id, done) => {
     console.log("deserialzable");

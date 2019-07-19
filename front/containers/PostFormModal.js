@@ -6,7 +6,8 @@ import { Modal, Form, Input, Button, Icon, Popconfirm, message } from "antd";
 import {
   UPLOAD_POST_IMAGE_REQUEST,
   CLEAR_POST_IMAGEPATH_REQUEST,
-  DELETE_POST_IMAGE_REQUEST
+  DELETE_POST_IMAGE_REQUEST,
+  ADD_POST_REQUEST
 } from "../reducer/post";
 
 const PostForm = ({ setmodalVisibleProps }) => {
@@ -14,9 +15,26 @@ const PostForm = ({ setmodalVisibleProps }) => {
   const [text, setText] = useState("");
 
   const imageInput = useRef();
+  const formSubmit = useRef();
+
   const dispatch = useDispatch();
 
-  const { imagePaths } = useSelector(state => state.post);
+  const { imagePaths, isAddingPost, addPostResult } = useSelector(
+    state => state.post
+  );
+
+  if (!isAddingPost && addPostResult) {
+    message.success("게시글이 작성 되었습니다");
+    setmodalVisible(false);
+  }
+
+  useEffect(() => {
+    if (!isAddingPost && addPostResult) {
+      message.success("게시글이 작성 되었습니다");
+      setmodalVisible(false);
+      return;
+    }
+  }, [isAddingPost, addPostResult]);
 
   useEffect(() => {
     return () => {
@@ -36,12 +54,9 @@ const PostForm = ({ setmodalVisibleProps }) => {
     setmodalVisible(false);
   }, modalVisible);
 
-  const onChangeText = useCallback(
-    e => {
-      setText(e.target.value);
-    },
-    [text]
-  );
+  const onChangeText = useCallback(e => {
+    setText(e.target.value);
+  }, []);
 
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
@@ -65,9 +80,25 @@ const PostForm = ({ setmodalVisibleProps }) => {
         type: DELETE_POST_IMAGE_REQUEST,
         data: index
       });
+      message.success("삭제되었습니다");
     },
     []
   );
+
+  const onClickSubmit = useCallback(() => {
+    if (text.trim() == "") {
+      return message.error("내용을 입력해 주세요 !");
+    }
+    formSubmit.current.props.onSubmit();
+  }, [text]);
+
+  const onSubmitForm = useCallback(() => {
+    const data = { text, imagePaths };
+    dispatch({
+      type: ADD_POST_REQUEST,
+      data
+    });
+  }, [text, imagePaths]);
 
   return (
     <>
@@ -78,12 +109,12 @@ const PostForm = ({ setmodalVisibleProps }) => {
         onOk={onHandleOk}
         onCancel={onHandleCancel}
         footer={[
-          <Button key="submit" type="primary" onClick={onHandleOk}>
+          <Button type="primary" onClick={onClickSubmit}>
             공유하기
           </Button>
         ]}
       >
-        <Form>
+        <Form ref={formSubmit} onSubmit={onSubmitForm}>
           <Input.TextArea
             maxLength={140}
             placeholder="어떤 재미난 일이 있었나요 ? "
@@ -103,10 +134,11 @@ const PostForm = ({ setmodalVisibleProps }) => {
                 title="삭제 하시겠습니까 ?"
                 okText="삭제"
                 cancelText="취소"
-                onConfirm={onDeleteImage}
+                onConfirm={onDeleteImage(i)}
                 icon={<Icon type="delete" />}
+                Key={i}
               >
-                <div key={i} style={{ display: "inline-block" }}>
+                <div style={{ display: "inline-block" }}>
                   <img
                     src={`http://localhost:3060/${v}`}
                     style={{ width: "200px" }}
