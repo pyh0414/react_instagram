@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import Router from "next/router";
-import { Input, Form, Icon, Button } from "antd";
+import { Input, Form, Icon, Button, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
 import { LOG_IN_REQUEST } from "../reducer/user";
@@ -22,11 +22,16 @@ const SignUp = ({ children }) => {
   const [password, setChangePassword] = useState("");
 
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.user);
+  const { isLoginSuccess, hasLoginRequestFinished } = useSelector(
+    state => state.user
+  );
 
   useEffect(() => {
-    user && Router.push("/home");
-  }, user);
+    hasLoginRequestFinished &&
+      (isLoginSuccess
+        ? message.success("로그인 되었습니다") && Router.push("/home")
+        : message.success("아이디 또는 비밀번호를 확인해 주세요"));
+  }, [isLoginSuccess, hasLoginRequestFinished]);
 
   const onChangeId = e => {
     setChangeId(e.target.value);
