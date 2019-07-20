@@ -6,7 +6,8 @@ import { applyMiddleware, compose, createStore } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 
-// import SignIn from ".";
+import Header from "../containers/Header";
+import Home from "../pages/index.js";
 import reducer from "../reducer";
 import rootSaga from "../sagas";
 
