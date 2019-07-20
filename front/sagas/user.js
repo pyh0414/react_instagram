@@ -11,9 +11,9 @@ import {
   EXISTING_ID_CHECK_REQUEST,
   EXISTING_ID_CHECK_SUCCESS,
   EXISTING_ID_CHECK_FAILURE,
-  UPLOAD_PROFILE_REQUEST,
-  UPLOAD_PROFILE_FAILURE,
-  UPLOAD_PROFILE_SUCCESS
+  UPLOAD_PROFILE_IMAGE_REQUEST,
+  UPLOAD_PROFILE_IMAGE_FAILURE,
+  UPLOAD_PROFILE_IMAGE_SUCCESS
 } from "../reducer/user";
 
 function signUpAPI(data) {
@@ -49,10 +49,12 @@ function logInAPI(data) {
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data);
-    yield put({
-      type: LOG_IN_SUCCESS,
-      data: result.data
-    });
+    if (result) {
+      yield put({
+        type: LOG_IN_SUCCESS,
+        data: result.data
+      });
+    }
   } catch (err) {
     console.error(err);
     yield put({
@@ -92,37 +94,37 @@ function* watchIdCheck() {
 }
 
 //-------------------------------------------------------
-function uploadProfileAPI(data) {
+function uploadProfileImageAPI(data) {
   return axios.post("/user/image", data);
 }
 
-function* uploadProfile(action) {
+function* uploadProfileImage(action) {
   try {
-    const result = yield call(uploadProfileAPI, action.data);
+    const result = yield call(uploadProfileImageAPI, action.data);
 
     yield put({
-      type: UPLOAD_PROFILE_SUCCESS,
+      type: UPLOAD_PROFILE_IMAGE_SUCCESS,
       data: result.data
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: UPLOAD_PROFILE_FAILURE
+      type: UPLOAD_PROFILE_IMAGE_FAILURE
     });
   }
 }
 
-function* watchUploadImage() {
-  yield takeEvery(UPLOAD_PROFILE_REQUEST, uploadProfile);
+function* watchUploadProfileImage() {
+  yield takeEvery(UPLOAD_PROFILE_IMAGE_REQUEST, uploadProfileImage);
 }
 
 //-------------------------------------------------------
 
-export default function* userSage() {
+export default function* userSaga() {
   yield all([
     fork(watchSignUp),
     fork(watchLogIn),
     fork(watchIdCheck),
-    fork(watchUploadImage)
+    fork(watchUploadProfileImage)
   ]);
 }
