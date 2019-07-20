@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   SIGN_UP_REQUEST,
   EXISTING_ID_CHECK_REQUEST,
-  UPLOAD_PROFILE_REQUEST
+  UPLOAD_PROFILE_IMAGE_REQUEST
 } from "../reducer/user";
 
 const Wrapper = styled.div`
@@ -117,7 +117,7 @@ const SignUp = () => {
     imgFormData.append("image", e.target.files[0]);
 
     dispatch({
-      type: UPLOAD_PROFILE_REQUEST,
+      type: UPLOAD_PROFILE_IMAGE_REQUEST,
       data: imgFormData
     });
   }, []);
@@ -188,7 +188,6 @@ const SignUp = () => {
             hidden
             onChange={onChangeImages}
           />
-          {/* <Button onClick={onClickImageUpload}>이미지 업로드</Button> */}
           <br />
 
           <Button onClick={onClickImageUpload}>
