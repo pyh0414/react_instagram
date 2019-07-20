@@ -7,7 +7,8 @@ import {
   UPLOAD_POST_IMAGE_REQUEST,
   CLEAR_POST_IMAGEPATH_REQUEST,
   DELETE_POST_IMAGE_REQUEST,
-  ADD_POST_REQUEST
+  ADD_POST_REQUEST,
+  CLEAR_POST_FORM_STATUS
 } from "../reducer/post";
 
 const PostForm = ({ setmodalVisibleProps }) => {
@@ -23,11 +24,6 @@ const PostForm = ({ setmodalVisibleProps }) => {
     state => state.post
   );
 
-  if (!isAddingPost && addPostResult) {
-    message.success("게시글이 작성 되었습니다");
-    setmodalVisible(false);
-  }
-
   useEffect(() => {
     if (!isAddingPost && addPostResult) {
       message.success("게시글이 작성 되었습니다");
@@ -42,6 +38,9 @@ const PostForm = ({ setmodalVisibleProps }) => {
       setmodalVisibleProps(false);
       dispatch({
         type: CLEAR_POST_IMAGEPATH_REQUEST
+      });
+      dispatch({
+        type: CLEAR_POST_FORM_STATUS
       });
     };
   }, [modalVisible]);
