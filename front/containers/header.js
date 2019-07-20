@@ -1,31 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Col, Input, Form, Icon, Button } from "antd";
+import React, { useState } from "react";
+import { Col, Input, Icon, Modal } from "antd";
 import styled from "styled-components";
+import Router from "next/router";
 
+import PostFormModal from "./PostFormModal";
 const HeaderWrapper = styled.div`
-  height: 70px;
+  height: 55px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.0975);
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
-  }
-};
-
-const Image = styled.img`
+const InstagramLogo = styled.img`
   width: 40px;
   height: 40px;
   display: block;
   margin: 0px auto;
+  cursor: pointer;
 `;
 
 const Search = styled.div`
@@ -35,62 +27,46 @@ const Search = styled.div`
 `;
 
 const Header = () => {
-  const dummy = {
-    user: { id: "pyh" }
-  };
+  const [modalVisible, setmodalVisible] = useState(false);
 
   return (
     <HeaderWrapper>
-      <Col xs={5} md={6}>
-        <Image src="http://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c521.png" />
+      <Col xs={5} md={7}>
+        <InstagramLogo
+          src="http://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c521.png"
+          onClick={() => {
+            return Router.push("/home");
+          }}
+        />
       </Col>
-      <Col xs={10} md={9}>
+      <Col xs={10} md={7}>
         <Search>
-          <Input.Search size="small" />
+          <Input.Search size="small" style={{ width: "70%" }} />
         </Search>
       </Col>
       <Col xs={5} md={9}>
-        {!dummy.user ? (
-          <>
-            <Col xs={10} md={5}>
-              <Image src="https://img.icons8.com/ios/50/000000/gender-neutral-user.png" />
-            </Col>
-            <Col xs={10} md={5}>
-              <Image src="https://cdn0.iconfinder.com/data/icons/essentials-9/128/__Heart-512.png" />
-            </Col>
-          </>
-        ) : (
-          <Form layout="inline">
-            <Form.Item>
-              <Input
-                prefix={
-                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                placeholder="Username"
-              />
-            </Form.Item>
-            <Form.Item>
-              <Input
-                prefix={
-                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                로그인
-              </Button>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" onClick={openModal}>
-                회원가입
-              </Button>
-            </Form.Item>
-          </Form>
-        )}
+        <>
+          <Col xs={6} md={3}>
+            <Icon type="user" style={{ fontSize: "23px" }} />
+          </Col>
+          <Col xs={6} md={3}>
+            <Icon type="heart" style={{ fontSize: "23px" }} />
+          </Col>
+          <Col xs={6} md={3}>
+            <Icon
+              type="form"
+              style={{ fontSize: "23px" }}
+              onClick={() => {
+                setmodalVisible(true);
+              }}
+            />
+          </Col>
+          <Col xs={6} md={3}>
+            <Icon type="logout" style={{ fontSize: "23px" }} />
+          </Col>
+        </>
       </Col>
+      {modalVisible && <PostFormModal setmodalVisibleProps={setmodalVisible} />}
     </HeaderWrapper>
   );
 };
