@@ -2,6 +2,8 @@ import produce from "immer";
 
 export const initialState = {
   user: null,
+  isLoginSuccess: false,
+  hasLoginRequestFinished: false,
   isSignedUpSuccess: false,
   hasIdChecked: false,
   isExistingId: false,
@@ -20,9 +22,9 @@ export const EXISTING_ID_CHECK_REQUEST = "ID_CHECEK_REQUEST";
 export const EXISTING_ID_CHECK_SUCCESS = "ID_CHECEK_SUCCESS";
 export const EXISTING_ID_CHECK_FAILURE = "ID_CHECEK_FAILURE";
 
-export const UPLOAD_PROFILE_REQUEST = "UPLOAD_PROFILE_REQUEST";
-export const UPLOAD_PROFILE_SUCCESS = "UPLOAD_PROFILE_SUCCESS";
-export const UPLOAD_PROFILE_FAILURE = "UPLOAD_PROFILE_FAILURE";
+export const UPLOAD_PROFILE_IMAGE_REQUEST = "UPLOAD_PROFILE_REQUEST";
+export const UPLOAD_PROFILE_IMAGE_SUCCESS = "UPLOAD_PROFILE_SUCCESS";
+export const UPLOAD_PROFILE_IMAGE_FAILURE = "UPLOAD_PROFILE_FAILURE";
 
 export default (state = initialState, action) => {
   return produce(state, draft => {
@@ -38,13 +40,20 @@ export default (state = initialState, action) => {
         draft.isSignedUpSuccess = false;
         break;
       }
+      case LOG_IN_REQUEST: {
+        (draft.hasLoginRequestFinished = false), (draft.isLoginSuccess = false);
+        break;
+      }
       case LOG_IN_SUCCESS: {
-        draft.user = action.data;
-
+        (draft.user = action.data),
+          (draft.hasLoginRequestFinished = true),
+          (draft.isLoginSuccess = true);
         break;
       }
       case LOG_IN_FAILURE: {
-        draft.user = null;
+        (draft.user = null),
+          (draft.hasLoginRequestFinished = true),
+          (draft.isLoginSuccess = false);
         break;
       }
       case EXISTING_ID_CHECK_SUCCESS: {
@@ -57,11 +66,11 @@ export default (state = initialState, action) => {
         draft.hasIdChecked = true;
         break;
       }
-      case UPLOAD_PROFILE_SUCCESS: {
+      case UPLOAD_PROFILE_IMAGE_SUCCESS: {
         draft.profileImage = action.data;
         break;
       }
-      case UPLOAD_PROFILE_SUCCESS: {
+      case UPLOAD_PROFILE_IMAGE_SUCCESS: {
         draft.profileImage = "";
         break;
       }
