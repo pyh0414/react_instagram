@@ -7,6 +7,7 @@ const expressSession = require("express-session");
 const dotenv = require("dotenv");
 
 const userRouter = require("./routes/user");
+const postRouter = require("./routes/post");
 
 const passportConfig = require("./passport");
 const db = require("./models");
@@ -21,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: true,
+    origin: "http://localhost:3000",
     credentials: true
   })
 );
@@ -44,6 +45,7 @@ app.use(passport.session());
 passportConfig();
 
 app.use("/user", userRouter);
+app.use("/post", postRouter);
 
 app.listen(3060, () => {
   console.log("server is running on 3000");
