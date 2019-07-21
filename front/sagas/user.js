@@ -13,7 +13,10 @@ import {
   EXISTING_ID_CHECK_FAILURE,
   UPLOAD_PROFILE_IMAGE_REQUEST,
   UPLOAD_PROFILE_IMAGE_FAILURE,
-  UPLOAD_PROFILE_IMAGE_SUCCESS
+  UPLOAD_PROFILE_IMAGE_SUCCESS,
+  LOG_OUT_REQUEST,
+  LOG_OUT_SUCCESS,
+  LOG_OUT_FAILURE
 } from "../reducer/user";
 
 function signUpAPI(data) {
@@ -120,11 +123,36 @@ function* watchUploadProfileImage() {
 
 //-------------------------------------------------------
 
+function logOutAPI(data) {
+  return axios.post("/user/logout", data);
+}
+
+function* logOut(action) {
+  try {
+    yield call(logOutAPI);
+    yield put({
+      type: LOG_OUT_SUCCESS
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOG_OUT_FAILURE
+    });
+  }
+}
+
+function* watchLogOut() {
+  yield takeEvery(LOG_OUT_REQUEST, logOut);
+}
+
+//-------------------------------------------------------
+
 export default function* userSaga() {
   yield all([
     fork(watchSignUp),
     fork(watchLogIn),
     fork(watchIdCheck),
-    fork(watchUploadProfileImage)
+    fork(watchUploadProfileImage),
+    fork(watchLogOut)
   ]);
 }

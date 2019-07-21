@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Col, Input, Icon, Modal } from "antd";
 import styled from "styled-components";
 import Router from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+
+import { LOG_OUT_REQUEST } from "../reducer/user";
 
 import PostFormModal from "./PostFormModal";
 const HeaderWrapper = styled.div`
@@ -28,7 +31,17 @@ const Search = styled.div`
 
 const Header = () => {
   const [modalVisible, setmodalVisible] = useState(false);
+  const dispatch = useDispatch();
 
+  const { isLogoutSuccess, hasLogoutRequestFinished } = useSelector(
+    state => state.user
+  );
+
+  const onLogout = useCallback(() => {
+    dispatch({
+      type: LOG_OUT_REQUEST
+    });
+  }, []);
   return (
     <HeaderWrapper>
       <Col xs={5} md={7}>
@@ -62,7 +75,11 @@ const Header = () => {
             />
           </Col>
           <Col xs={6} md={3}>
-            <Icon type="logout" style={{ fontSize: "23px" }} />
+            <Icon
+              type="logout"
+              style={{ fontSize: "23px" }}
+              onClick={onLogout}
+            />
           </Col>
         </>
       </Col>

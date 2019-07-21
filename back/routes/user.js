@@ -6,6 +6,8 @@ const multer = require("multer");
 const router = express.Router();
 const db = require("../models");
 
+const { isLoggedIn, isNotLoggedIn } = require("./middleware");
+
 const upload = multer({
   storage: multer.diskStorage({
     destination: function(req, file, done) {
@@ -90,6 +92,12 @@ router.get("/check", async (req, res, next) => {
 router.post("/image", upload.single("image"), (req, res) => {
   console.log(req.file);
   res.json(req.file.filename);
+});
+
+router.post("/logout", (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.send("로그아웃 성공");
 });
 
 module.exports = router;

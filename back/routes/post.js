@@ -20,7 +20,7 @@ const upload = multer({
   })
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const { text: content, imagePaths } = req.body;
 

@@ -22,16 +22,14 @@ const SignUp = ({ children }) => {
   const [password, setChangePassword] = useState("");
 
   const dispatch = useDispatch();
-  const { isLoginSuccess, hasLoginRequestFinished } = useSelector(
-    state => state.user
-  );
+  const { hasLoginRequestFinished, user } = useSelector(state => state.user);
 
   useEffect(() => {
     hasLoginRequestFinished &&
-      (isLoginSuccess
+      (user
         ? message.success("로그인 되었습니다") && Router.push("/home")
         : message.success("아이디 또는 비밀번호를 확인해 주세요"));
-  }, [isLoginSuccess, hasLoginRequestFinished]);
+  }, [user, hasLoginRequestFinished]);
 
   const onChangeId = e => {
     setChangeId(e.target.value);
@@ -50,6 +48,8 @@ const SignUp = ({ children }) => {
         password
       }
     });
+    setChangeId("");
+    setChangePassword("");
   };
 
   return (

@@ -1,13 +1,14 @@
 import produce from "immer";
 
 export const initialState = {
-  user: null,
-  isLoginSuccess: false,
-  hasLoginRequestFinished: false,
-  isSignedUpSuccess: false,
-  hasIdChecked: false,
-  isExistingId: false,
-  profileImage: ""
+  user: null, // 현재 내 사용자 정보, 로그인/로그아웃 여부
+  isExistingId: false, // 아이디 중복확인(회원가입할 때 사용)
+  profileImage: "", //  사용자 프로필 이미지(회원가입할 떄 사용)
+
+  hasLoginRequestFinished: false, // 로그인 요청이 끝났는지
+
+  isSignedUpSuccess: false, // 회원가입 성공여부
+  hasIdCheckRequestFinished: false // 회원가입 요청이 끝났는지
 };
 
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
@@ -26,12 +27,18 @@ export const UPLOAD_PROFILE_IMAGE_REQUEST = "UPLOAD_PROFILE_REQUEST";
 export const UPLOAD_PROFILE_IMAGE_SUCCESS = "UPLOAD_PROFILE_SUCCESS";
 export const UPLOAD_PROFILE_IMAGE_FAILURE = "UPLOAD_PROFILE_FAILURE";
 
+export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
+export const LOG_OUT_SUCCESS = "LOG_OUT_SUCCESS";
+export const LOG_OUT_FAILURE = "LOG_OUT_FAILURE";
+
+export const CLEAR_LOGIN_STATUS_REQUEST = "CLEAR_LOGIN_STATUS_REQUEST";
+
 export default (state = initialState, action) => {
   return produce(state, draft => {
     switch (action.type) {
       case SIGN_UP_SUCCESS: {
         draft.isSignedUpSuccess = true;
-        draft.hasIdChecked = false;
+        draft.hasIdCheckRequestFinished = false;
         draft.isExistingId = false;
         draft.profileImage = "";
         break;
@@ -41,29 +48,39 @@ export default (state = initialState, action) => {
         break;
       }
       case LOG_IN_REQUEST: {
-        (draft.hasLoginRequestFinished = false), (draft.isLoginSuccess = false);
+        (draft.hasLoginRequestFinished = false),
+          (draft.isLogoutSuccess = false);
         break;
       }
       case LOG_IN_SUCCESS: {
-        (draft.user = action.data),
-          (draft.hasLoginRequestFinished = true),
-          (draft.isLoginSuccess = true);
+        (draft.user = action.data), (draft.hasLoginRequestFinished = true);
         break;
       }
       case LOG_IN_FAILURE: {
-        (draft.user = null),
-          (draft.hasLoginRequestFinished = true),
-          (draft.isLoginSuccess = false);
+        (draft.user = null), (draft.hasLoginRequestFinished = true);
+        break;
+      }
+      case LOG_OUT_REQUEST: {
+        (draft.isLogoutSuccess = false),
+          (draft.hasLoginRequestFinished = false);
+        break;
+      }
+      case LOG_OUT_SUCCESS: {
+        (draft.user = null), (draft.isLogoutSuccess = true);
+        break;
+      }
+      case LOG_OUT_FAILURE: {
+        draft.hasLoginRequestFinished = true;
         break;
       }
       case EXISTING_ID_CHECK_SUCCESS: {
         draft.isExistingId = true;
-        draft.hasIdChecked = true;
+        draft.hasIdCheckRequestFinished = true;
         break;
       }
       case EXISTING_ID_CHECK_FAILURE: {
         draft.isExistingId = false;
-        draft.hasIdChecked = true;
+        draft.hasIdCheckRequestFinished = true;
         break;
       }
       case UPLOAD_PROFILE_IMAGE_SUCCESS: {
