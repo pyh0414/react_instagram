@@ -11,6 +11,7 @@ const UserProfile = styled.img`
 const Wrapper = styled.div`
   display: flex;
   margin-bottom: 2px;
+  align-items: center;
 `;
 
 const User = styled.div`
