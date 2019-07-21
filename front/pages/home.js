@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import Router from "next/router";
+import { useSelector } from "react-redux";
 
 import PostCard from "../containers/PostCard";
 import Header from "../containers/Header";
@@ -10,6 +12,11 @@ const Wrapper = styled.div`
 `;
 
 const Home = () => {
+  const { user } = useSelector(state => state.user);
+  useEffect(() => {
+    !user && Router.push("/");
+  }, [user]);
+
   return (
     <div style={{ backgroundColor: "whilte" }}>
       <Header />
