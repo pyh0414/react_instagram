@@ -49,7 +49,7 @@ const SignUp = () => {
     isExistingId,
     profileImage,
     isSignedUpSuccess,
-    hasIdChecked
+    hasIdCheckRequestFinished
   } = useSelector(state => state.user);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const SignUp = () => {
         <IdCheckButtonCustom type="danger" onClick={onExistingIdCheck}>
           중복확인
         </IdCheckButtonCustom>
-        {hasIdChecked &&
+        {hasIdCheckRequestFinished &&
           (isExistingId ? "중복된 아이디 입니다" : "사용가능한 아이디 입니다.")}
         <br />
         <div>
