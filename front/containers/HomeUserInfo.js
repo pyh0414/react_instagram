@@ -2,16 +2,17 @@ import react from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+  display: flex;
+  margin-bottom: 2px;
+  align-items: center;
+`;
+
 const UserProfile = styled.img`
   width: 47px;
   height: 50px;
   border-radius: 100%;
   margin-left: 15px;
-`;
-const Wrapper = styled.div`
-  display: flex;
-  margin-bottom: 2px;
-  align-items: center;
 `;
 
 const User = styled.div`
