@@ -61,7 +61,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       include: [
         {
           model: db.User,
-          attributes: ["userId", "name"]
+          attributes: ["userId", "name", "profile"]
         },
         { model: db.Image },
         { model: db.User, as: "Likers", attributes: ["id"] }
