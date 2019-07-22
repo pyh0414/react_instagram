@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
+const postsRouter = require("./routes/posts");
 
 const passportConfig = require("./passport");
 const db = require("./models");
@@ -46,6 +47,7 @@ passportConfig();
 
 app.use("/user", userRouter);
 app.use("/post", postRouter);
+app.use("/posts", postsRouter);
 
 app.listen(3060, () => {
   console.log("server is running on 3000");
