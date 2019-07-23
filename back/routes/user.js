@@ -61,8 +61,11 @@ router.post("/login", async (req, res, next) => {
     return req.login(user, async local => {
       try {
         const fullUser = await db.User.findOne({
-          userId: user.id
+          where: {
+            userId: user.userId
+          }
         });
+
         return res.json(fullUser);
       } catch (err) {
         console.error(err);
