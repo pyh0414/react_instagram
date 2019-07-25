@@ -100,15 +100,14 @@ export default (state = initialState, action) => {
       case UNLIKE_POST_SUCCESS: {
         const { userId, postId } = action.data;
 
-        const index = draft.mainPosts.findIndex(v => {
+        const postIndex = draft.mainPosts.findIndex(v => {
           return v.id === postId;
         });
 
-        draft.mainPosts[index].Likers.push({ id: userId });
-        const newMainPosts = draft.mainPosts[index].Likers.find.map(v => {
+        const newLikers = draft.mainPosts[postIndex].Likers.filter(v => {
           return userId != v.id;
         });
-        console.log(newMainPosts);
+        draft.mainPosts[postIndex].Likers = newLikers;
         break;
       }
     }
