@@ -83,4 +83,40 @@ router.post("/image", upload.array("image"), (req, res) => {
   res.json(files);
 });
 
+router.post("/:id/like", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+    if (!post) {
+      return res.status(404).send("해당 게시글이 존재하지 않습니다.");
+    }
+    await post.addLikers(req.user.id);
+    res.json(req.user.id);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+router.delete("/:id/like", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+    if (!post) {
+      return res.status(404).send("해당 게시글이 존재하지 않습니다.");
+    }
+    await post.removeLikers(req.user.id);
+    res.json(req.user.id);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
 module.exports = router;

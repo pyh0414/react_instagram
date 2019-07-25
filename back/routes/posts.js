@@ -14,13 +14,14 @@ router.get("/", isLoggedIn, async (req, res, next) => {
           attributes: ["userId", "profile"]
         },
         {
-          model: db.Image
+          model: db.Image,
+          attributes: ["src"]
         },
         {
           model: db.User,
           through: "Like",
           as: "Likers",
-          attributes: ["name", "userId", "profile"]
+          attributes: ["id"]
         }
       ],
       order: [["createdAt", "desc"]]
