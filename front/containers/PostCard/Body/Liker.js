@@ -5,10 +5,10 @@ const Wrapper = styled.div`
   margin-top: 5px;
 `;
 
-const Liker = () => {
+const Liker = ({ likers }) => {
   return (
     <Wrapper>
-      <span style={{ color: "black" }}>9명</span>
+      <span style={{ color: "black" }}>{likers.length}명</span>
       <span>이 좋아합니다</span>
     </Wrapper>
   );

@@ -18,7 +18,7 @@ const Body = ({ post }) => {
   return (
     <Wrapper>
       <LikeAndComment postId={post.id} likers={post.Likers} />
-      <Liker />
+      <Liker likers={post.Likers} />
       <Contents />
       <Comments />
     </Wrapper>
