@@ -6,25 +6,24 @@ import { applyMiddleware, compose, createStore } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 
-import Header from "../containers/Header";
-import Home from "../pages/index.js";
 import reducer from "../reducer";
 import rootSaga from "../sagas";
 
 const Instagram = ({ Component, store }) => {
   return (
-    <Provider store={store}>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css"
-        />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.js" />
-      </Head>
-      <Container>
+    <Container>
+      <Provider store={store}>
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css"
+          />
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.js" />
+        </Head>
+
         <Component />
-      </Container>
-    </Provider>
+      </Provider>
+    </Container>
   );
 };
 

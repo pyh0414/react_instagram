@@ -33,10 +33,6 @@ const Header = () => {
   const [modalVisible, setmodalVisible] = useState(false);
   const dispatch = useDispatch();
 
-  const { isLogoutSuccess, hasLogoutRequestFinished } = useSelector(
-    state => state.user
-  );
-
   const onLogout = useCallback(() => {
     dispatch({
       type: LOG_OUT_REQUEST
@@ -60,7 +56,13 @@ const Header = () => {
       <Col xs={5} md={9}>
         <>
           <Col xs={6} md={3}>
-            <Icon type="user" style={{ fontSize: "23px" }} />
+            <Icon
+              type="user"
+              style={{ fontSize: "23px" }}
+              onClick={() => {
+                return Router.push("/profile");
+              }}
+            />
           </Col>
           <Col xs={6} md={3}>
             <Icon type="heart" style={{ fontSize: "23px" }} />

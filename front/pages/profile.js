@@ -1,7 +1,12 @@
 import React from "react";
 
+import Header from "../containers/Header";
 const Profile = () => {
-  return <div>profile</div>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 };
 
 export default Profile;
