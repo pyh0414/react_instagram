@@ -5,10 +5,10 @@ const Wrapper = styled.div`
   margin-top: 5px;
 `;
 
-const Contents = () => {
+const Contents = ({ content }) => {
   return (
     <Wrapper>
-      <div>antd.9615 손 떨린 흔적 ...더보기</div>
+      <div>{content}</div>
     </Wrapper>
   );
 };
