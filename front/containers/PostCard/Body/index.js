@@ -1,24 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 
+import LikeAndComment from "./LikeAndComment";
+import Liker from "./Liker";
+import Contents from "./Contents";
+import Comments from "./Comments";
+
 const Wrapper = styled.div`
-  height: 500px;
+  height: 230px;
   width: 100%;
+  border-bottom: 1px solid #edebeb;
+  margin-top: 10px;
+  margin-left: 15px;
 `;
 
-const ImgCustom = styled.img`
-  width: 100%;
-  height: 440px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Body = () => {
+const Body = ({ post }) => {
   return (
     <Wrapper>
-      <ImgCustom src="https://t1.daumcdn.net/cfile/tistory/2122BD4F5966F29B13" />
+      <LikeAndComment postId={post.id} likers={post.Likers} />
+      <Liker />
+      <Contents />
+      <Comments />
     </Wrapper>
   );
 };
