@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 
 const ImgCustom = styled.img`
   width: 6%;
-  height: 72%;
+  height: 38px;
   border-radius: 100%;
   margin-left: 15px;
 `;
