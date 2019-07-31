@@ -1,17 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-import LikeAndComment from "./LikeAndComment";
+import LikeAndComment from "./Like";
 import Liker from "./Liker";
-import Contents from "./Contents";
-import Comments from "./Comments";
+import Content from "./Content";
+import Comment from "./Comment";
 
 const Wrapper = styled.div`
-  height: 230px;
   width: 100%;
-  border-bottom: 1px solid #edebeb;
-  margin-top: 10px;
-  margin-left: 15px;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 20px;
 `;
 
 const Body = ({ post }) => {
@@ -19,8 +18,18 @@ const Body = ({ post }) => {
     <Wrapper>
       <LikeAndComment postId={post.id} likers={post.Likers} />
       <Liker likers={post.Likers} />
-      <Contents />
-      <Comments />
+      <Content contents={post.content} />
+      {post.Comments && post.Comments.length > 4 ? (
+        <div
+          style={{ marginTop: "13px", overflow: "scroll", maxHeight: "150px" }}
+        >
+          <Comment comments={post.Comments} />
+        </div>
+      ) : (
+        <div style={{ marginTop: "13px" }}>
+          <Comment comments={post.Comments} />
+        </div>
+      )}
     </Wrapper>
   );
 };
