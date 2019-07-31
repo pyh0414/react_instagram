@@ -10,7 +10,7 @@ const ImgCustom = styled.img`
 const Comments = ({ comments }) => {
   const reply = comments.map((v, i) => {
     return (
-      <div style={{ marginTop: "3px" }}>
+      <div key={i} style={{ marginTop: "3px" }}>
         <span>
           <ImgCustom src={`http://localhost:3060/${v.User.profile}`} />
         </span>
