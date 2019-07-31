@@ -27,6 +27,10 @@ export const UNLIKE_POST_REQUEST = "UNLIKE_LIKE_POST_REQUEST";
 export const UNLIKE_POST_SUCCESS = "UNLIKE_LIKE_POST_SUCCESS";
 export const UNLIKE_POST_FAILURE = "UNLIKE_LIKE_POST_FAILURE";
 
+export const ADD_COMMENT_REQUEST = "ADD_COMMENT_REQUEST";
+export const ADD_COMMENT_SUCCESS = "ADD_COMMENT_SUCCESS";
+export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
+
 export const CLEAR_POST_IMAGEPATH_REQUEST =
   "CLEAR_CLEAR_POST_IMAGEPATH_REQUEST";
 export const DELETE_POST_IMAGE_REQUEST = "DELETE_POST_IMAGE_REQUEST";
@@ -65,7 +69,7 @@ export default (state = initialState, action) => {
       }
 
       case ADD_POST_SUCCESS: {
-        draft.mainPosts.push(action.data);
+        draft.mainPosts.unshift(action.data);
         draft.addPostResult = true;
         draft.isAddingPost = false;
         break;
@@ -108,6 +112,17 @@ export default (state = initialState, action) => {
           return userId != v.id;
         });
         draft.mainPosts[postIndex].Likers = newLikers;
+        break;
+      }
+
+      case ADD_COMMENT_SUCCESS: {
+        const { PostId, content, User, id } = action.data;
+
+        const postIndex = draft.mainPosts.findIndex(v => {
+          return v.id === PostId;
+        });
+
+        draft.mainPosts[postIndex].Comments.push({ id, content, User });
         break;
       }
     }

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Head from "./Head";
 import Images from "./Images";
 import Body from "./Body";
-import Comment from "./Comment";
+import CommentInput from "./CommentInput";
 
 const Wrapper = styled.div`
   margin-left: 40%;
@@ -23,9 +23,9 @@ const Article = ({ post }) => {
     <Container>
       <Wrapper>
         <Head user={post.User} />
-        <Images imagePath={post.Images[0].src} />
+        <Images images={post.Images} />
         <Body post={post} />
-        <Comment />
+        <CommentInput postId={post.id} />
       </Wrapper>
     </Container>
   );
