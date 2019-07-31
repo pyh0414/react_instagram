@@ -22,6 +22,11 @@ router.get("/", isLoggedIn, async (req, res, next) => {
           through: "Like",
           as: "Likers",
           attributes: ["id"]
+        },
+        {
+          model: db.Comment,
+          attributes: ["id", "content"],
+          include: [{ model: db.User, attributes: ["userId", "profile"] }]
         }
       ],
       order: [["createdAt", "desc"]]
