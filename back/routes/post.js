@@ -64,7 +64,8 @@ router.post("/", isLoggedIn, async (req, res, next) => {
           attributes: ["userId", "name", "profile"]
         },
         { model: db.Image },
-        { model: db.User, as: "Likers", attributes: ["id"] }
+        { model: db.User, as: "Likers", attributes: ["id"] },
+        { model: db.Comment }
       ]
     });
 
@@ -113,6 +114,39 @@ router.delete("/:id/like", isLoggedIn, async (req, res, next) => {
     }
     await post.removeLikers(req.user.id);
     res.json(req.user.id);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+
+    if (!post) {
+      return res.status(404).send("해당 게시글이 존재하지 않습니다.");
+    }
+
+    const newComment = await db.Comment.create({
+      PostId: req.params.id,
+      content: req.body.comment,
+      UserId: req.user.id
+    });
+
+    await post.addComments(newComment.id);
+    const comment = await db.Comment.findOne({
+      where: {
+        id: newComment.id
+      },
+      include: [{ model: db.User, attributes: ["id", "userId", "profile"] }]
+    });
+
+    res.json(comment);
   } catch (err) {
     console.error(err);
     next(err);
