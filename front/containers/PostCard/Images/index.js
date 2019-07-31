@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -9,18 +9,14 @@ const Wrapper = styled.div`
 const ImgCustom = styled.img`
   width: 100%;
   height: 440px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
-const Body = ({ imagePath }) => {
+const Image = ({ images }) => {
   return (
     <Wrapper>
-      <ImgCustom src={`http://localhost:3060/${imagePath}`} />
+      <ImgCustom src={`http://localhost:3060/${images[0].src}`} />
     </Wrapper>
   );
 };
 
-export default Body;
+export default Image;
