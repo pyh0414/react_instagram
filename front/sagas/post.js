@@ -16,7 +16,10 @@ import {
   LIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
-  UNLIKE_POST_FAILURE
+  UNLIKE_POST_FAILURE,
+  ADD_COMMENT_REQUEST,
+  ADD_COMMENT_SUCCESS,
+  ADD_COMMENT_FAILURE
 } from "../reducer/post";
 
 function uploadPostImageAPI(data) {
@@ -146,12 +149,44 @@ function* watchUnLikePost() {
 
 // ------------------------------------------------
 
+function addCommentAPI(data) {
+  const { postId, text: comment } = data;
+  return axios.post(
+    `/post/${postId}/comment`,
+    { comment },
+    { withCredentials: true }
+  );
+}
+
+function* addComment(action) {
+  try {
+    const result = yield call(addCommentAPI, action.data);
+
+    yield put({
+      type: ADD_COMMENT_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: ADD_COMMENT_FAILURE
+    });
+  }
+}
+
+function* wawtchAddComment() {
+  yield takeEvery(ADD_COMMENT_REQUEST, addComment);
+}
+
+// ------------------------------------------------
+
 export default function* postSaga() {
   yield all([
     fork(watchUploadPostImage),
     fork(watchAddPost),
     fork(watchLoadMainPosts),
     fork(watchLikePost),
-    fork(watchUnLikePost)
+    fork(watchUnLikePost),
+    fork(wawtchAddComment)
   ]);
 }
