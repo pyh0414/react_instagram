@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "Followings",
       through: "Follow"
     });
+    db.User.belongsToMany(db.Room, { through: "RoomUser" });
   };
 
   return User;
