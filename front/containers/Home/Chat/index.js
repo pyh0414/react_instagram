@@ -1,15 +1,25 @@
 import React, { useEffect } from "react";
+import styled from "styled-components";
 import io from "socket.io-client";
 
-const Chat = () => {
-  let roomSocket;
-  let chatSocket;
+import Input from "./Input";
+import Head from "./Head";
+import Body from "./Body";
 
-  useEffect(() => {
-    roomSocket = io("localhost:3060/room");
-    chatSocket = io("localhost:3060/chat");
-  }, []);
-  return <div>Chat</div>;
+const Wrapper = styled.div`
+  margin-top: 30px;
+  border: 2px solid #e6e6e6;
+  height: 500px;
+  border-radius: 2%;
+`;
+const Chat = () => {
+  return (
+    <Wrapper>
+      <Head />
+      <Body />
+      <Input />
+    </Wrapper>
+  );
 };
 
 export default Chat;

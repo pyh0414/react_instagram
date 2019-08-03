@@ -6,10 +6,10 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Col, Row } from "antd";
 
-import PostCard from "../containers/PostCard";
-import Header from "../containers/Header";
-import UserInfo from "../containers/HomeUserInfo";
-import Chat from "../containers/Chat";
+import PostCard from "../containers/Home/PostCard";
+import Header from "../containers/Home/Header";
+import UserInfo from "../containers/Home/HomeUserInfo";
+import Chat from "../containers/Home/Chat";
 
 import { LOAD_MAIN_POSTS_REQUEST } from "../reducer/post";
 
@@ -19,7 +19,6 @@ const Wrapper = styled.div`
 `;
 
 const Side = styled.div`
-  position: sticky;
   width: 50%;
   height: 60%;
   margin-top: 40px;
@@ -54,7 +53,13 @@ const Home = () => {
               })}
           </Col>
 
-          <Col md={8}>
+          <Col
+            md={8}
+            style={{
+              position: "sticky",
+              top: 0
+            }}
+          >
             <Side>
               <UserInfo />
               <Chat />

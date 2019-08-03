@@ -9,14 +9,18 @@ const dotenv = require("dotenv");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const postsRouter = require("./routes/posts");
+const roomRouter = require("./routes/room");
 
 const passportConfig = require("./passport");
 const db = require("./models");
+
+const socket = require("./sokcet");
 
 db.sequelize.sync();
 dotenv.config();
 
 const app = express();
+const server = require("http").Server(app);
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -48,7 +52,10 @@ passportConfig();
 app.use("/user", userRouter);
 app.use("/post", postRouter);
 app.use("/posts", postsRouter);
+app.use("/room", roomRouter);
 
-app.listen(3060, () => {
-  console.log("server is running on 3000");
+socket(server, app);
+
+server.listen(3060, () => {
+  console.log("server is running on 3060");
 });
