@@ -2,10 +2,10 @@ import React, { useCallback, useState, useEffect } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 import { useDispatch } from "react-redux";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 
 import { MAKE_ROOM_REQUEST, MAKE_ROOM_SUCCESS } from "../../../../reducer/chat";
-// import { roomSocket } from "../../../../utils/socket";
+
 const Wrapper = styled.div`
   display: flex;
   height: 7%;
@@ -16,11 +16,10 @@ const Wrapper = styled.div`
 const Head = () => {
   const [roomName, setRoomName] = useState("");
   const dispatch = useDispatch();
-  let roomSocket;
 
   useEffect(() => {
-    roomSocket = io("localhost:3060/room");
-    roomSocket.on("room_make_success", newRoom => {
+    const roomSocket = io("localhost:3060/room");
+    roomSocket.on("make_room_success", newRoom => {
       if (newRoom) {
         const { id, name, master } = newRoom;
         dispatch({
@@ -29,9 +28,6 @@ const Head = () => {
         });
       }
     });
-  }, []);
-
-  useEffect(() => {
     return () => {
       roomSocket.close();
     };
@@ -42,6 +38,9 @@ const Head = () => {
   }, []);
 
   const onMakeRoom = useCallback(() => {
+    if (roomName.trim() == "") {
+      return message.error("채팅방 이름을 입력해 주세요 !");
+    }
     dispatch({
       type: MAKE_ROOM_REQUEST,
       data: roomName
