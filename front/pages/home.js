@@ -12,6 +12,7 @@ import UserInfo from "../containers/Home/HomeUserInfo";
 import Chat from "../containers/Home/Chat";
 
 import { LOAD_MAIN_POSTS_REQUEST } from "../reducer/post";
+import { LOAD_CHAT_ROOM_REQUEST } from "../reducer/chat";
 
 const Wrapper = styled.div`
   background-color: #fafafa;
@@ -38,6 +39,9 @@ const Home = () => {
   useEffect(() => {
     dispatch({
       type: LOAD_MAIN_POSTS_REQUEST
+    });
+    dispatch({
+      type: LOAD_CHAT_ROOM_REQUEST
     });
   }, []);
 
