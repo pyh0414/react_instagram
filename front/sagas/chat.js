@@ -3,8 +3,13 @@ import axios from "axios";
 
 import {
   MAKE_ROOM_REQUEST,
-  MAKE_ROOM_SUCCESS,
-  MAKE_ROOM_FAILURE
+  MAKE_ROOM_FAILURE,
+  LOAD_CHAT_ROOM_REQUEST,
+  LOAD_CHAT_ROOM_SUCCESS,
+  LOAD_CHAT_ROOM_FAILURE,
+  REMOVE_ROOM_REQUEST,
+  REMOVE_ROOM_SUCCESS,
+  REMOVE_ROOM_FAILURE
 } from "../reducer/chat";
 
 function makeRoomAPI(text) {
@@ -14,10 +19,6 @@ function makeRoomAPI(text) {
 function* makeRoom(action) {
   try {
     yield call(makeRoomAPI, action.data);
-    // yield put({
-    //   type: MAKE_ROOM_SUCCESS,
-    //   data: result.data
-    // });
   } catch (err) {
     console.error(err);
     yield put({
@@ -32,6 +33,51 @@ function* watchMakeRoom() {
 
 // ------------------------------------------------
 
+function loadRoomAPI() {
+  return axios.get("/rooms", { withCredentials: true });
+}
+
+function* loadRoom() {
+  try {
+    const result = yield call(loadRoomAPI);
+    yield put({
+      type: LOAD_CHAT_ROOM_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_CHAT_ROOM_FAILURE
+    });
+  }
+}
+
+function* watchLoadRoom() {
+  yield takeEvery(LOAD_CHAT_ROOM_REQUEST, loadRoom);
+}
+
+// ------------------------------------------------
+function removeRoomAPI(roomId) {
+  return axios.delete(`/room/${roomId}`, { withCredentials: true });
+}
+
+function* removeRoom(action) {
+  try {
+    yield call(removeRoomAPI, action.data);
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: REMOVE_ROOM_FAILURE
+    });
+  }
+}
+
+function* watchRemoveRoom() {
+  yield takeEvery(REMOVE_ROOM_REQUEST, removeRoom);
+}
+
+// ------------------------------------------------
+
 export default function* postSaga() {
-  yield all([fork(watchMakeRoom)]);
+  yield all([fork(watchMakeRoom), fork(watchLoadRoom), fork(watchRemoveRoom)]);
 }

@@ -17,7 +17,7 @@ const Chat = () => {
     <Wrapper>
       <Head />
       <Body />
-      <Input />
+      {/* <Input /> */}
     </Wrapper>
   );
 };
