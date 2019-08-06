@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.associate = db => {
+    db.User.hasMany(db.Chat);
     db.User.hasMany(db.Post, { as: "Posts" });
     db.User.hasMany(db.Comment);
     db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
@@ -40,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "Followings",
       through: "Follow"
     });
-    db.User.belongsToMany(db.Room, { through: "RoomUser" });
+    db.User.belongsToMany(db.Room, { through: "RoomUser", as: "RoomName" });
   };
 
   return User;

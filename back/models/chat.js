@@ -5,10 +5,6 @@ module.exports = (sequelize, DataTypes) => {
       content: {
         type: DataTypes.STRING(100),
         allowNull: false
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false
       }
     },
     {
@@ -18,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Chat.associate = db => {
+    db.Chat.belongsTo(db.User);
     db.Chat.belongsTo(db.Room);
   };
 

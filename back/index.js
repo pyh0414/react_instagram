@@ -3,7 +3,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const expressSession = require("express-session");
+const session = require("express-session");
 const dotenv = require("dotenv");
 
 const userRouter = require("./routes/user");
@@ -16,13 +16,29 @@ const passportConfig = require("./passport");
 const db = require("./models");
 
 const socket = require("./sokcet");
-
 db.sequelize.sync();
 dotenv.config();
 
 const app = express();
-const server = require("http").Server(app);
+// const server = require("http").Server(app);
 
+// const mysqlStore = require("connect-mysql")(session);
+// const options = {
+//   config: {
+//     user: "root",
+//     password: "kosaf",
+//     database: "instagram"
+//   }
+// };
+const sessionMiddleware = session({
+  resave: false,
+  saveUninitialized: false,
+  secret: "process.env.COOKIE_SECRET",
+  cookie: {
+    httpOnly: true, // 자바스크립트에서 쿠키게 접근 못함
+    secure: false // https쓸때 true
+  }
+});
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -34,18 +50,7 @@ app.use(
 );
 app.use("/", express.static("uploads"));
 app.use(cookieParser(process.env.COOKIE_SECRET));
-app.use(
-  expressSession({
-    resave: false,
-    saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET,
-    cookie: {
-      httpOnly: true, // 자바스크립트에서 쿠키게 접근 못함
-      secure: false // https쓸때 true
-    },
-    name: "pyh"
-  })
-);
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig();
@@ -56,8 +61,8 @@ app.use("/posts", postsRouter);
 app.use("/room", roomRouter);
 app.use("/rooms", roomsRouter);
 
-socket(server, app);
-
-server.listen(3060, () => {
-  console.log("server is running on 3060");
+const server = app.listen(3060, () => {
+  console.log("express server in running on 3060 port");
 });
+
+socket(server, app, sessionMiddleware);

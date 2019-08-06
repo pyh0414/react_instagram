@@ -1,18 +1,19 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import Router from "next/router";
-import { useDispatch } from "react-redux";
-
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Col, Row } from "antd";
 
 import PostCard from "../containers/Home/PostCard";
 import Header from "../containers/Home/Header";
 import UserInfo from "../containers/Home/HomeUserInfo";
-import Chat from "../containers/Home/Chat";
+import Messenger from "../containers/Home/Messenger";
 
 import { LOAD_MAIN_POSTS_REQUEST } from "../reducer/post";
-import { LOAD_CHAT_ROOM_REQUEST } from "../reducer/chat";
+import {
+  LOAD_CHAT_ROOM_REQUEST,
+  CONNECT_ROOM_SOCKET_REQUEST
+} from "../reducer/chat";
 
 const Wrapper = styled.div`
   background-color: #fafafa;
@@ -29,6 +30,7 @@ const Side = styled.div`
 const Home = () => {
   const { user } = useSelector(state => state.user);
   const { mainPosts } = useSelector(state => state.post);
+  const { roomSocket } = useSelector(state => state.chat);
 
   const dispatch = useDispatch();
 
@@ -66,7 +68,7 @@ const Home = () => {
           >
             <Side>
               <UserInfo />
-              <Chat />
+              <Messenger />
             </Side>
           </Col>
         </Row>

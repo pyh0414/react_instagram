@@ -1,13 +1,20 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-import Input from "./Input";
-import Head from "./Head";
+import ChatItem from "../../../../components/Home/Messenger/Chat";
+import Foot from "./foot";
 
 const Index = () => {
+  const { currentRoom } = useSelector(state => state.chat);
   return (
     <>
-      <Head />
-      <Input />
+      <div style={{ height: "93%" }}>
+        {currentRoom.chats &&
+          currentRoom.chats.map((v, i) => {
+            return <ChatItem item={v} key={v.id} />;
+          })}
+      </div>
+      <Foot />
     </>
   );
 };

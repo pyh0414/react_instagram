@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { Button } from "antd";
 
-import { ENTER_ROOM_REQUEST } from "../../../../reducer/chat";
+import { useSelector } from "react-redux";
+import { Button } from "antd";
 
 const Wrapper = styled.div`
   font-style: "bold";
@@ -14,18 +13,22 @@ const Wrapper = styled.div`
 
 const Room = ({ room }) => {
   const { user } = useSelector(state => state.user);
-  const dispatch = useDispatch();
+  const { roomSocket } = useSelector(state => state.chat);
 
-  const onRemoveRoom = useCallback(roomId => async () => {
-    await axios.delete(`/room/${roomId}`, { withCredentials: true });
-  });
+  const onRemoveRoom = useCallback(
+    roomId => () => {
+      axios.delete(`/room/${roomId}`, { withCredentials: true });
+    },
+    []
+  );
 
   const onEnterRoom = useCallback(
     roomId => () => {
-      dispatch({
-        type: ENTER_ROOM_REQUEST,
-        data: roomId
-      });
+      axios
+        .post(`/room/enter/${roomId}`, {}, { withCredentials: true })
+        .then(room => {
+          roomSocket.emit("enter_room_request", room);
+        });
     },
     []
   );
@@ -53,7 +56,12 @@ const Room = ({ room }) => {
           </Button>
         </>
       ) : (
-        <Button style={{ float: "right" }} type="primary" size="small">
+        <Button
+          style={{ float: "right" }}
+          type="primary"
+          size="small"
+          onClick={onEnterRoom(room.id)}
+        >
           입장
         </Button>
       )}

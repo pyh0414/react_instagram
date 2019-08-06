@@ -17,6 +17,8 @@ const CustomForm = styled(Form)`
   width: 22%;
 `;
 
+import { CONNECT_SOCKET_REQUEST } from "../reducer/chat";
+
 const SignUp = ({ children }) => {
   const [id, setChangeId] = useState("");
   const [password, setChangePassword] = useState("");
@@ -25,10 +27,17 @@ const SignUp = ({ children }) => {
   const { hasLoginRequestFinished, user } = useSelector(state => state.user);
 
   useEffect(() => {
-    hasLoginRequestFinished &&
-      (user
-        ? message.success("로그인 되었습니다") && Router.push("/home")
-        : message.success("아이디 또는 비밀번호를 확인해 주세요"));
+    if (hasLoginRequestFinished) {
+      dispatch({
+        type: CONNECT_SOCKET_REQUEST
+      });
+      message.success("로그인 되었습니다");
+      Router.push("/home");
+      if (user) {
+      } else {
+        message.success("아이디 또는 비밀번호를 확인해 주세요");
+      }
+    }
   }, [user, hasLoginRequestFinished]);
 
   const onChangeId = e => {

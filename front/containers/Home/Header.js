@@ -33,11 +33,16 @@ const Header = () => {
   const [modalVisible, setmodalVisible] = useState(false);
   const dispatch = useDispatch();
 
+  let { roomSocket, chatSocket } = useSelector(state => state.chat);
+
   const onLogout = useCallback(() => {
     dispatch({
       type: LOG_OUT_REQUEST
     });
+    roomSocket && roomSocket.close();
+    chatSocket && chatSocket.close();
   }, []);
+
   return (
     <HeaderWrapper>
       <Col xs={5} md={7}>

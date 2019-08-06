@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Room.associate = db => {
-    db.Room.belongsToMany(db.User, { through: "RoomUser" });
+    db.Room.belongsToMany(db.User, { through: "RoomUser", as: "UserInRoom" });
     db.Room.hasMany(db.Chat);
   };
 
