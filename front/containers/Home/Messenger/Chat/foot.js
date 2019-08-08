@@ -33,9 +33,9 @@ const Foot = () => {
   );
   const onOutRoom = useCallback(() => {
     axios
-      .post(`/room/out/${currentRoom.roomId}`, {}, { withCredentials: true })
-      .then(() => {
-        roomSocket.emit("out_room_request", currentRoom.roomId);
+      .post(`/room/${currentRoom.roomId}/out`, {}, { withCredentials: true })
+      .then(room => {
+        roomSocket.emit("out_room_request", room.data);
       });
   }, []);
   return (
