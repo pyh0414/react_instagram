@@ -20,16 +20,7 @@ db.sequelize.sync();
 dotenv.config();
 
 const app = express();
-// const server = require("http").Server(app);
 
-// const mysqlStore = require("connect-mysql")(session);
-// const options = {
-//   config: {
-//     user: "root",
-//     password: "kosaf",
-//     database: "instagram"
-//   }
-// };
 const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
@@ -65,4 +56,4 @@ const server = app.listen(3060, () => {
   console.log("express server in running on 3060 port");
 });
 
-socket(server, app, sessionMiddleware);
+socket(server, app);
