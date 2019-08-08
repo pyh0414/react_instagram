@@ -1,7 +1,7 @@
 const express = require("express");
 
 const db = require("../models");
-const { isLoggedIn, isNotLoggedIn } = require("./middleware");
+const { isLoggedIn } = require("./middleware");
 
 const router = express.Router();
 
@@ -9,10 +9,8 @@ router.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const io = req.app.get("io");
 
-    const { roomName } = req.body;
-
     const newRoom = await db.Room.create({
-      name: roomName,
+      name: req.body.roomName,
       master: req.user.id
     });
     if (newRoom) {
@@ -50,10 +48,8 @@ router.delete("/:id", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.post("/enter/:id", isLoggedIn, async (req, res, next) => {
+router.post("/:id/enter", isLoggedIn, async (req, res, next) => {
   try {
-    const io = req.app.get("io");
-
     const room = await db.Room.findOne({
       where: {
         id: req.params.id
@@ -64,7 +60,8 @@ router.post("/enter/:id", isLoggedIn, async (req, res, next) => {
           attributes: ["content", "userId", "id"],
           include: [{ model: db.User, attributes: ["profile"] }]
         }
-      ]
+      ],
+      order: [[db.Chat, "id", "asc"]]
     });
 
     const user = await db.User.findOne({
@@ -84,9 +81,30 @@ router.post("/enter/:id", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.post("/:id/out", isLoggedIn, async (req, res, next) => {
+  try {
+    const room = await db.Room.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+    if (!room) {
+      res.status(404).send("방이 존재하지 않습니다");
+    }
+    await room.removeUserInRoom(req.user.id);
+    res.json({
+      userId: req.user.id
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
 router.post("/:id/chat", isLoggedIn, async (req, res, next) => {
   try {
     const io = req.app.get("io");
+
     const { content } = req.body;
     const room = db.Room.findOne({
       where: {
@@ -107,28 +125,7 @@ router.post("/:id/chat", isLoggedIn, async (req, res, next) => {
         .to(req.params.id)
         .emit("send_message_success", { content, userId: req.user.id });
     });
-  } catch (err) {
-    console.error(err);
-    next(err);
-  }
-});
-
-router.post("/out/:id", isLoggedIn, async (req, res, next) => {
-  try {
-    const io = req.app.get("io");
-    const room = await db.Room.findOne({
-      where: {
-        id: req.params.id
-      }
-    });
-    if (!room) {
-      res.status(404).send("방이 존재하지 않습니다");
-    }
-    await room.removeUserInRoom(req.user.id);
-    io.of("/room").emit("out_room_success", req.params.id);
-    res.json({
-      userId: req.user.id
-    });
+    res.json({ roomId: req.params.id });
   } catch (err) {
     console.error(err);
     next(err);
