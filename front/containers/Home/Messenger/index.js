@@ -46,7 +46,6 @@ const Messenger = () => {
     });
 
     roomSocket.on("enter_room_success", room => {
-      console.log("dispatch ", room.Chats);
       dispatch({
         type: ENTER_ROOM_SUCCESS,
         data: room
