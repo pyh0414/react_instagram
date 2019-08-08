@@ -30,23 +30,11 @@ const Messenger = () => {
       });
     });
 
-    roomSocket.on("make_room_success", newRoom => {
-      const { id, name, master } = newRoom;
+    roomSocket.on("make_room_success", room => {
+      const { id, name, master } = room;
       dispatch({
         type: MAKE_ROOM_SUCCESS,
         data: { id, name, master }
-      });
-    });
-
-    roomSocket.on("enter_room_success", room => {
-      dispatch({
-        type: ENTER_ROOM_SUCCESS,
-        data: room.data
-      });
-    });
-    roomSocket.on("out_room_success", () => {
-      dispatch({
-        type: OUT_ROOM_SUCCESS
       });
     });
 
@@ -54,6 +42,19 @@ const Messenger = () => {
       dispatch({
         type: SEND_MESSAGE_SUCCESS,
         data
+      });
+    });
+
+    roomSocket.on("enter_room_success", room => {
+      console.log("dispatch ", room.Chats);
+      dispatch({
+        type: ENTER_ROOM_SUCCESS,
+        data: room
+      });
+    });
+    roomSocket.on("out_room_success", () => {
+      dispatch({
+        type: OUT_ROOM_SUCCESS
       });
     });
   }, []);
