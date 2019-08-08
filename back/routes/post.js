@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const router = express();
 
-const { isLoggedIn, isNotLoggedIn } = require("./middleware");
+const { isLoggedIn } = require("./middleware");
 
 const db = require("../models");
 
@@ -22,15 +22,15 @@ const upload = multer({
 
 router.post("/", isLoggedIn, async (req, res, next) => {
   try {
-    const { text: content, imagePaths } = req.body;
+    const { text, imagePaths } = req.body;
 
     const newPost = await db.Post.create({
       // 게시글 등록
-      content,
+      content: text,
       UserId: req.user.id
     });
 
-    const hashtags = content.match(/#[^\s]+/g);
+    const hashtags = text.match(/#[^\s]+/g);
 
     if (hashtags) {
       const result = await Promise.all(
