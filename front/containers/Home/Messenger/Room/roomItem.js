@@ -25,9 +25,9 @@ const Room = ({ room }) => {
   const onEnterRoom = useCallback(
     roomId => () => {
       axios
-        .post(`/room/enter/${roomId}`, {}, { withCredentials: true })
+        .post(`/room/${roomId}/enter`, {}, { withCredentials: true })
         .then(room => {
-          roomSocket.emit("enter_room_request", room);
+          roomSocket.emit("enter_room_request", room.data.room);
         });
     },
     []
