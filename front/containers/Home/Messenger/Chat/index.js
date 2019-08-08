@@ -9,7 +9,7 @@ const Index = () => {
   return (
     <>
       <div style={{ height: "93%" }}>
-        {currentRoom.chats &&
+        {currentRoom.chats.length > 0 &&
           currentRoom.chats.map((v, i) => {
             return <ChatItem item={v} key={v.id} />;
           })}
