@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Chat.associate = db => {
     db.Chat.belongsTo(db.User);
-    db.Chat.belongsTo(db.Room);
+    db.Chat.belongsTo(db.Room, { onDelete: "cascade" });
   };
 
   return Chat;
