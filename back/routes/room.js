@@ -57,8 +57,8 @@ router.post("/:id/enter", isLoggedIn, async (req, res, next) => {
       include: [
         {
           model: db.Chat,
-          attributes: ["content", "userId", "id"],
-          include: [{ model: db.User, attributes: ["profile"] }]
+          attributes: ["content", "id"],
+          include: [{ model: db.User, attributes: ["profile", "id"] }]
         }
       ],
       order: [[db.Chat, "id", "asc"]]
@@ -106,6 +106,7 @@ router.post("/:id/chat", isLoggedIn, async (req, res, next) => {
     const io = req.app.get("io");
 
     const { content } = req.body;
+
     const room = db.Room.findOne({
       where: {
         id: req.params.id
@@ -116,14 +117,21 @@ router.post("/:id/chat", isLoggedIn, async (req, res, next) => {
       return res.status(404).send("해당 방이 없습니다.");
     }
 
+    const user = await db.User.findOne({
+      where: {
+        id: req.user.id
+      },
+      attributes: ["profile", "id"]
+    });
+
     await db.Chat.create({
       content,
       RoomId: req.params.id,
       UserId: req.user.id
-    }).then(() => {
+    }).then(chat => {
       io.of("/room")
         .to(req.params.id)
-        .emit("send_message_success", { content, userId: req.user.id });
+        .emit("send_message_success", { chat, user });
     });
     res.json({ roomId: req.params.id });
   } catch (err) {

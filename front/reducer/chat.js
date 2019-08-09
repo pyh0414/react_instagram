@@ -73,6 +73,7 @@ export default (state = initialState, action) => {
 
       case ENTER_ROOM_SUCCESS: {
         const { id, Chats } = action.data;
+
         draft.currentRoom = { roomId: id };
         draft.currentRoom.chats = Chats;
         break;
@@ -84,8 +85,10 @@ export default (state = initialState, action) => {
       }
 
       case SEND_MESSAGE_SUCCESS: {
+        const { chat, user } = action.data;
+        const { id: chatId, content } = chat;
         if (draft.currentRoom) {
-          draft.currentRoom.chats.push(action.data);
+          draft.currentRoom.chats.push({ content, id: chatId, User: user });
         }
         break;
       }
