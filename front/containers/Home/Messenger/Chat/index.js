@@ -8,7 +8,7 @@ const Index = () => {
   const { currentRoom } = useSelector(state => state.chat);
   return (
     <>
-      <div style={{ height: "93%" }}>
+      <div style={{ height: "93%", overflow: "scroll" }}>
         {currentRoom.chats.length > 0 &&
           currentRoom.chats.map((v, i) => {
             return <ChatItem item={v} key={v.id} />;
