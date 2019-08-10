@@ -11,6 +11,7 @@ module.exports = () => {
         passwordField: "password"
       },
       async (userId, password, done) => {
+        // done에서 넘긴 값은 serializable의 매개변수로 받음
         try {
           const user = await db.User.findOne({ where: { userId } });
 
