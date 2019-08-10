@@ -11,7 +11,7 @@ router.get("/", isLoggedIn, async (req, res, next) => {
       include: [
         {
           model: db.User,
-          attributes: ["userId", "profile"]
+          attributes: ["id", "userId", "profile"]
         },
         {
           model: db.Image,
@@ -21,7 +21,7 @@ router.get("/", isLoggedIn, async (req, res, next) => {
           model: db.User,
           through: "Like",
           as: "Likers",
-          attributes: ["id"]
+          attributes: ["id", "userId", "profile"]
         },
         {
           model: db.Comment,

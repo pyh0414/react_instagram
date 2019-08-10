@@ -91,13 +91,17 @@ export default (state = initialState, action) => {
       }
 
       case LIKE_POST_SUCCESS: {
-        const { userId, postId } = action.data;
+        const { user, postId } = action.data;
 
         const index = draft.mainPosts.findIndex(v => {
           return v.id === postId;
         });
 
-        draft.mainPosts[index].Likers.push({ id: userId });
+        draft.mainPosts[index].Likers.push({
+          id: user.id,
+          userId: user.userId,
+          profile: user.profile
+        });
         break;
       }
 

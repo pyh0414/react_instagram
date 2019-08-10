@@ -94,8 +94,17 @@ router.post("/:id/like", isLoggedIn, async (req, res, next) => {
     if (!post) {
       return res.status(404).send("해당 게시글이 존재하지 않습니다.");
     }
+
     await post.addLikers(req.user.id);
-    res.json(req.user.id);
+
+    const likers = await db.User.findOne({
+      where: {
+        id: req.user.id
+      },
+      attributes: ["id", "userId", "profile"]
+    });
+
+    res.json(likers);
   } catch (err) {
     console.error(err);
     next(err);
