@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import LikeAndComment from "./Like";
+import LikeIcon from "./LikeIcon";
 import Liker from "./Liker";
 import Content from "./Content";
 import Comment from "./Comment";
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 const Body = ({ post }) => {
   return (
     <Wrapper>
-      <LikeAndComment postId={post.id} likers={post.Likers} />
+      <LikeIcon postId={post.id} likers={post.Likers} />
       <Liker likers={post.Likers} />
       <Content contents={post.content} />
       {post.Comments && post.Comments.length > 4 ? (
