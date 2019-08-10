@@ -58,8 +58,9 @@ router.post("/login", async (req, res, next) => {
       return res.status(403).send(info.reason);
     }
 
-    return req.login(user, async local => {
+    return req.login(user, async () => {
       try {
+        // 로그인 성공했을 때 로직 처리
         const fullUser = await db.User.findOne({
           where: {
             userId: user.userId
