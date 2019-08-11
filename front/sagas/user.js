@@ -16,7 +16,13 @@ import {
   UPLOAD_PROFILE_IMAGE_SUCCESS,
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
-  LOG_OUT_FAILURE
+  LOG_OUT_FAILURE,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
+  FOLLOW_USER_FAILURE,
+  UNFOLLOW_USER_REQUEST,
+  UNFOLLOW_USER_SUCCESS,
+  UNFOLLOW_USER_FAILURE
 } from "../reducer/user";
 
 function signUpAPI(data) {
@@ -147,12 +153,64 @@ function* watchLogOut() {
 
 //-------------------------------------------------------
 
+function followAPI(userId) {
+  return axios.post(`/user/${userId}/follow`, {}, { withCredentials: true });
+}
+
+function* follow(action) {
+  try {
+    const result = yield call(followAPI, action.data);
+    yield put({
+      type: FOLLOW_USER_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: FOLLOW_USER_FAILURE
+    });
+  }
+}
+
+function* watchFollow() {
+  yield takeEvery(FOLLOW_USER_REQUEST, follow);
+}
+
+//-------------------------------------------------------
+
+function unFollowAPI(userId) {
+  return axios.delete(`/user/${userId}/follow`, { withCredentials: true });
+}
+
+function* unFollow(action) {
+  try {
+    const result = yield call(unFollowAPI, action.data);
+    yield put({
+      type: UNFOLLOW_USER_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UNFOLLOW_USER_FAILURE
+    });
+  }
+}
+
+function* watchUnFollow() {
+  yield takeEvery(UNFOLLOW_USER_REQUEST, unFollow);
+}
+
+//-------------------------------------------------------
+
 export default function* userSaga() {
   yield all([
     fork(watchSignUp),
     fork(watchLogIn),
     fork(watchIdCheck),
     fork(watchUploadProfileImage),
-    fork(watchLogOut)
+    fork(watchLogOut),
+    fork(watchFollow),
+    fork(watchUnFollow)
   ]);
 }

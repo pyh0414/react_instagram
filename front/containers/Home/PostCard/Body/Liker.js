@@ -40,6 +40,7 @@ const Liker = ({ likers }) => {
   const onLikerMouseOut = useCallback(() => {
     showLikersRef.current.style.display = "none";
   }, []);
+
   return (
     <Wrapper onMouseOver={onLikerMouseOver} onMouseOut={onLikerMouseOut}>
       <span style={{ color: "black" }}>{likers.length}명</span>
@@ -49,7 +50,7 @@ const Liker = ({ likers }) => {
         <div id="items">
           {likers.length > 0 &&
             likers.map((v, i) => {
-              return <Item item={v} key={v.id} />;
+              return <Item liker={v} key={v.id} />;
             })}
         </div>
       </ShowLikers>

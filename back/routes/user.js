@@ -64,7 +64,20 @@ router.post("/login", async (req, res, next) => {
         const fullUser = await db.User.findOne({
           where: {
             userId: user.userId
-          }
+          },
+          attributes: ["id", "userId", "profile"],
+          include: [
+            {
+              model: db.User,
+              as: "Followers",
+              attributes: ["id", "userId", "profile"]
+            },
+            {
+              model: db.User,
+              as: "Followings",
+              attributes: ["id", "userId", "profile"]
+            }
+          ]
         });
 
         return res.json(fullUser);
@@ -74,6 +87,46 @@ router.post("/login", async (req, res, next) => {
       }
     });
   })(req, res, next);
+});
+
+router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: req.user.id
+      }
+    });
+
+    await user.addFollower(req.params.id);
+
+    const you = await db.User.findOne({
+      where: {
+        id: req.params.id
+      },
+      attributes: ["id", "userId", "profile"]
+    });
+
+    res.status(200).json(you);
+  } catch (err) {
+    console.error(err);
+    next();
+  }
+});
+
+router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: req.user.id
+      }
+    });
+
+    await user.removeFollower(req.params.id);
+    res.status(200).send({ followingId: req.params.id });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 });
 
 router.get("/check", async (req, res, next) => {
