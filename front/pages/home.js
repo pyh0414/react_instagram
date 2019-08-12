@@ -35,10 +35,6 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    !user && Router.push("/");
-  }, [user]);
-
-  useEffect(() => {
     dispatch({
       type: LOAD_MAIN_POSTS_REQUEST
     });

@@ -33,7 +33,12 @@ const Header = () => {
   const [modalVisible, setmodalVisible] = useState(false);
   const dispatch = useDispatch();
 
-  let { roomSocket, chatSocket } = useSelector(state => state.chat);
+  const { roomSocket, chatSocket } = useSelector(state => state.chat);
+  const { user } = useSelector(state => state.user);
+
+  useEffect(() => {
+    !user && Router.push("/");
+  }, [user]);
 
   const onLogout = useCallback(() => {
     dispatch({
