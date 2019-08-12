@@ -65,7 +65,7 @@ router.post("/login", async (req, res, next) => {
           where: {
             userId: user.userId
           },
-          attributes: ["id", "userId", "profile"],
+          attributes: ["id", "userId", "profile", "name"],
           include: [
             {
               model: db.User,
@@ -143,6 +143,21 @@ router.get("/check", async (req, res, next) => {
   } catch (err) {
     console.error(err);
     return next(err);
+  }
+});
+
+router.get("/posts", isLoggedIn, async (req, res, next) => {
+  try {
+    const posts = await db.Post.findAll({
+      where: {
+        userId: req.user.id
+      }
+    });
+
+    res.json({ posts });
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 });
 

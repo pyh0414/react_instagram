@@ -7,8 +7,9 @@ export const initialState = {
   hasLoginRequestFinished: false, // 로그인 요청이 끝났는지
   isSignedUpSuccess: false, // 회원가입 성공여부
   hasIdCheckRequestFinished: false, // 회원가입 요청이 끝났는지
-  followers: [],
-  followings: []
+  followers: [], // 나를 팔로워하는 사람들
+  followings: [], // 내가 팔로잉 하는 사람들
+  posts: [] // 나의 게시글
 };
 
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
@@ -39,6 +40,10 @@ export const UNFOLLOW_USER_REQUEST = "UNFOLLOW_USER_REQUEST";
 export const UNFOLLOW_USER_SUCCESS = "UNFOLLOW_USER_SUCCESS";
 export const UNFOLLOW_USER_FAILURE = "UNFOLLOW_USER_FAILURE";
 
+export const LOAD_MY_POSTS_REQUEST = "LOAD_MY_POSTS_REQUEST";
+export const LOAD_MY_POSTS_SUCCESS = "LOAD_MY_POSTS_SUCCESS";
+export const LOAD_MY_POSTS_FAILURE = "LOAD_MY_POSTS_FAILURE";
+
 export const CLEAR_LOGIN_STATUS_REQUEST = "CLEAR_LOGIN_STATUS_REQUEST";
 
 export default (state = initialState, action) => {
@@ -61,10 +66,17 @@ export default (state = initialState, action) => {
         break;
       }
       case LOG_IN_SUCCESS: {
-        const { Followers, Followings, id, userId, profile } = action.data;
+        const {
+          Followers,
+          Followings,
+          id,
+          userId,
+          profile,
+          name
+        } = action.data;
         draft.followers = Followings;
         draft.followings = Followers;
-        draft.user = { id, userId, profile };
+        draft.user = { id, userId, profile, name };
         draft.hasLoginRequestFinished = true;
         break;
       }
@@ -113,6 +125,10 @@ export default (state = initialState, action) => {
         const newFollowings = draft.followings.filter(v => v.id != followingId);
         draft.followings = newFollowings;
         break;
+      }
+
+      case LOAD_MY_POSTS_SUCCESS: {
+        draft.posts = action.data.posts;
       }
     }
   });

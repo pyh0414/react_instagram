@@ -22,7 +22,10 @@ import {
   FOLLOW_USER_FAILURE,
   UNFOLLOW_USER_REQUEST,
   UNFOLLOW_USER_SUCCESS,
-  UNFOLLOW_USER_FAILURE
+  UNFOLLOW_USER_FAILURE,
+  LOAD_MY_POSTS_SUCCESS,
+  LOAD_MY_POSTS_REQUEST,
+  LOAD_MY_POSTS_FAILURE
 } from "../reducer/user";
 
 function signUpAPI(data) {
@@ -203,6 +206,31 @@ function* watchUnFollow() {
 
 //-------------------------------------------------------
 
+function loadMyPostAPI() {
+  return axios.get(`/user/posts`, { withCredentials: true });
+}
+
+function* loadMyPost(action) {
+  try {
+    const result = yield call(loadMyPostAPI);
+    yield put({
+      type: LOAD_MY_POSTS_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_MY_POSTS_FAILURE
+    });
+  }
+}
+
+function* watchLoadMyPost() {
+  yield takeEvery(LOAD_MY_POSTS_REQUEST, loadMyPost);
+}
+
+//-------------------------------------------------------
+
 export default function* userSaga() {
   yield all([
     fork(watchSignUp),
@@ -211,6 +239,7 @@ export default function* userSaga() {
     fork(watchUploadProfileImage),
     fork(watchLogOut),
     fork(watchFollow),
-    fork(watchUnFollow)
+    fork(watchUnFollow),
+    fork(watchLoadMyPost)
   ]);
 }
