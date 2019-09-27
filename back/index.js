@@ -24,10 +24,10 @@ const app = express();
 const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
-  secret: "process.env.COOKIE_SECRET",
+  secret: process.env.COOKIE_SECRET,
   cookie: {
-    httpOnly: true, // 자바스크립트에서 쿠키게 접근 못함
-    secure: false // https쓸때 true
+    httpOnly: true, // // 자바스크립트에서 쿠키게 접근 못함
+    secure: false // // https쓸때 true
   }
 });
 app.use(morgan("dev"));
