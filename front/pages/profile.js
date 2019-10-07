@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { Row, Col, Button, Icon } from "antd";
+import { Row, Col, Button, Icon, Card } from "antd";
 
 import { LOAD_MY_POSTS_REQUEST } from "../reducer/user";
 import Header from "../containers/Home/Header";
@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 
 const UserInfo = styled.div`
   height: 300px;
-  border-bottom: 2px solid #f2f2f2;
+
   padding-top: 60px;
 `;
 
@@ -102,9 +102,31 @@ const Profile = () => {
           </Row>
         </UserInfo>
         <Row>
-          <Col span={8}>col-8</Col>
-          <Col span={8}>col-8</Col>
-          <Col span={8}>col-8</Col>
+          {posts &&
+            posts.map((v, i) => {
+              return (
+                <Col span={8}>
+                  <Card
+                    hoverable
+                    style={{ width: "90%" }}
+                    cover={
+                      <img
+                        alt="example"
+                        src={`http://localhost:3060/${v.Images[0].src}`}
+                      />
+                    }
+                  >
+                                  
+                    <Card.Meta
+                      title="Europe Street beat"
+                      description="www.instagram.com"
+                    />
+                                
+                  </Card>
+                            
+                </Col>
+              );
+            })}
         </Row>
       </Wrapper>
     </div>
