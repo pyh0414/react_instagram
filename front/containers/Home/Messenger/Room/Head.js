@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Button, Input, message } from "antd";
@@ -21,6 +21,7 @@ const Head = () => {
     if (roomName.trim() == "") {
       return message.error("채팅방 이름을 입력해 주세요 !");
     }
+
     axios.post("/room", { roomName }, { withCredentials: true });
 
     setRoomName("");
