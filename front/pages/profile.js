@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { Row, Col, Button, Icon, Card } from "antd";
+import { Row, Col, Button, Icon } from "antd";
 
 import { LOAD_MY_POSTS_REQUEST } from "../reducer/user";
 import Header from "../containers/Home/Header";
+import PostModal from "../components/PostCarousel";
 
 const Wrapper = styled.div`
   width: 60%;
@@ -42,10 +43,18 @@ const CustomUl = styled.ul`
   }
 `;
 
+const ImgCustom = styled.img`
+  width: 90%;
+  height: 100%;
+  cursor: pointer;
+`;
+
 const Profile = () => {
   const { user, followings, followers, posts } = useSelector(
     state => state.user
   );
+
+  const [postModal, setPostModal] = useState(false);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -54,6 +63,9 @@ const Profile = () => {
     });
   }, []);
 
+  const onChangePostModal = useCallback(() => {
+    setPostModal(!postModal);
+  }, [postModal]);
   return (
     <div>
       <Header />
@@ -106,24 +118,17 @@ const Profile = () => {
             posts.map((v, i) => {
               return (
                 <Col span={8}>
-                  <Card
-                    hoverable
-                    style={{ width: "90%" }}
-                    cover={
-                      <img
-                        alt="example"
-                        src={`http://localhost:3060/${v.Images[0].src}`}
-                      />
-                    }
-                  >
-                                  
-                    <Card.Meta
-                      title="Europe Street beat"
-                      description="www.instagram.com"
-                    />
-                                
-                  </Card>
-                            
+                  <div style={{ height: "250px" }}>
+                    <ImgCustom
+                      src={`http://localhost:3060/${v.Images[0].src}`}
+                      onClick={onChangePostModal}
+                    ></ImgCustom>
+                  </div>
+                           
+                  {postModal && (
+                    <PostModal onChangePostModal={onChangePostModal} />
+                  )}
+                                        
                 </Col>
               );
             })}
