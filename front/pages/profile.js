@@ -5,7 +5,7 @@ import { Row, Col, Button, Icon } from "antd";
 
 import { LOAD_MY_POSTS_REQUEST } from "../reducer/user";
 import Header from "../containers/Home/Header";
-import PostModal from "../components/PostCarousel";
+import PostModal from "../components/Post";
 
 const Wrapper = styled.div`
   width: 60%;
@@ -118,7 +118,7 @@ const Profile = () => {
             posts.map((v, i) => {
               return (
                 <Col span={8}>
-                  <div style={{ height: "250px" }}>
+                  <div style={{ height: "250px" }} key={i}>
                     <ImgCustom
                       src={`http://localhost:3060/${v.Images[0].src}`}
                       onClick={onChangePostModal}
@@ -126,7 +126,7 @@ const Profile = () => {
                   </div>
                            
                   {postModal && (
-                    <PostModal onChangePostModal={onChangePostModal} />
+                    <PostModal onChangePostModal={onChangePostModal} post={v} />
                   )}
                                         
                 </Col>
