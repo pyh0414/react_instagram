@@ -11,19 +11,17 @@ import rootSaga from "../sagas";
 
 const Instagram = ({ Component, store }) => {
   return (
-    <Container>
-      <Provider store={store}>
-        <Head>
-          <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css"
-          />
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.js" />
-        </Head>
+    <Provider store={store}>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.js" />
+      </Head>
 
-        <Component />
-      </Provider>
-    </Container>
+      <Component />
+    </Provider>
   );
 };
 
