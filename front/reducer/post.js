@@ -4,7 +4,8 @@ export const initialState = {
   imagePaths: [],
   mainPosts: [],
   isAddingPost: false,
-  addPostResult: false
+  addPostResult: false,
+  selectedPost: {}
 };
 
 export const UPLOAD_POST_IMAGE_REQUEST = "UPLOAD_POST_REQUEST";
@@ -35,6 +36,7 @@ export const CLEAR_POST_IMAGEPATH_REQUEST =
   "CLEAR_CLEAR_POST_IMAGEPATH_REQUEST";
 export const DELETE_POST_IMAGE_REQUEST = "DELETE_POST_IMAGE_REQUEST";
 export const CLEAR_POST_FORM_STATUS = "CLEAR_POST_FORM_STATUS";
+export const CHANGE_SELECTED_POST = "CHANGE_SELECTED_POST";
 
 export default (state = initialState, action) => {
   return produce(state, draft => {
@@ -128,6 +130,10 @@ export default (state = initialState, action) => {
 
         draft.mainPosts[postIndex].Comments.push({ id, content, User });
         break;
+      }
+
+      case CHANGE_SELECTED_POST: {
+        draft.selectedPost = action.data;
       }
     }
   });
