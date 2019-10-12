@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Col, Input, Icon, Modal } from "antd";
+import { Col, Input, Icon } from "antd";
 import styled from "styled-components";
 import Router from "next/router";
+
 import { useDispatch, useSelector } from "react-redux";
 
 import { LOG_OUT_REQUEST } from "../../reducer/user";
