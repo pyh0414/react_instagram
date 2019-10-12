@@ -27,7 +27,7 @@ const ModalContent = styled.div`
   display: flex;
 `;
 
-const PostCarousel = ({ onCloseModal, user, post }) => {
+const PostCarousel = ({ onCloseModal, user }) => {
   const { selectedPost } = useSelector(state => state.post);
   return (
     <Modal>
