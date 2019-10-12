@@ -6,14 +6,11 @@ import { Col, Row } from "antd";
 
 import PostCard from "../containers/Home/PostCard";
 import Header from "../containers/Home/Header";
-import UserInfo from "../containers/Home/HomeUserInfo";
+import UserInfo from "../components/UserInfo";
 import Messenger from "../containers/Home/Messenger";
 
 import { LOAD_MAIN_POSTS_REQUEST } from "../reducer/post";
-import {
-  LOAD_CHAT_ROOM_REQUEST,
-  CONNECT_ROOM_SOCKET_REQUEST
-} from "../reducer/chat";
+import { LOAD_CHAT_ROOM_REQUEST } from "../reducer/chat";
 
 const Wrapper = styled.div`
   background-color: #fafafa;
@@ -30,7 +27,6 @@ const Side = styled.div`
 const Home = () => {
   const { user } = useSelector(state => state.user);
   const { mainPosts } = useSelector(state => state.post);
-  const { roomSocket } = useSelector(state => state.chat);
 
   const dispatch = useDispatch();
 
@@ -63,7 +59,7 @@ const Home = () => {
             }}
           >
             <Side>
-              <UserInfo />
+              <UserInfo user={user} />
               <Messenger />
             </Side>
           </Col>
