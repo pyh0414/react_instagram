@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 import LikeIcon from "./LikeIcon";
-import Liker from "./Liker";
-import Content from "./Content";
-import Comment from "./Comment";
+import Liker from "../../../../components/PostLikers";
+import Content from "../../../../components/PostContent";
+import Comment from "../../../../components/PostComment";
 
 const Wrapper = styled.div`
   width: 100%;
