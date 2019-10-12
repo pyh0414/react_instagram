@@ -4,9 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Row, Col, Button, Icon } from "antd";
 
 import { LOAD_MY_POSTS_REQUEST } from "../reducer/user";
-import Header from "../containers/Home/Header";
-import PostModal from "../components/Post";
+import { CHANGE_SELECTED_POST } from "../reducer/post";
 
+import Header from "../containers/Home/Header";
+
+import Post from "../components/Post";
 const Wrapper = styled.div`
   width: 60%;
   margin: auto;
@@ -14,13 +16,12 @@ const Wrapper = styled.div`
 
 const UserInfo = styled.div`
   height: 300px;
-
   padding-top: 60px;
 `;
 
 const UserImage = styled.img`
   height: 160px;
-  width: 160px;
+  width: 170px;
   border-radius: 50%;
   margin-left: 25%;
 `;
@@ -63,9 +64,21 @@ const Profile = () => {
     });
   }, []);
 
-  const onChangePostModal = useCallback(() => {
-    setPostModal(!postModal);
+  const onCloseModal = useCallback(() => {
+    setPostModal(false);
   }, [postModal]);
+
+  const onOpenModal = useCallback(
+    post => () => {
+      dispatch({
+        type: CHANGE_SELECTED_POST,
+        data: post
+      });
+      setPostModal(true);
+    },
+    [postModal]
+  );
+
   return (
     <div>
       <Header />
@@ -117,22 +130,18 @@ const Profile = () => {
           {posts &&
             posts.map((v, i) => {
               return (
-                <Col span={8}>
-                  <div style={{ height: "250px" }} key={i}>
+                <Col span={8} key={i} style={{ marginTop: "10px" }}>
+                  <div style={{ height: "250px" }}>
                     <ImgCustom
                       src={`http://localhost:3060/${v.Images[0].src}`}
-                      onClick={onChangePostModal}
+                      onClick={onOpenModal(v)}
                     ></ImgCustom>
                   </div>
-                           
-                  {postModal && (
-                    <PostModal onChangePostModal={onChangePostModal} post={v} />
-                  )}
-                                        
                 </Col>
               );
             })}
         </Row>
+        {postModal && <Post onCloseModal={onCloseModal} user={user} />}
       </Wrapper>
     </div>
   );
