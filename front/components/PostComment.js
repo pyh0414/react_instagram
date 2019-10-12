@@ -12,12 +12,14 @@ const Comments = ({ comments }) => {
     return (
       <div key={i} style={{ marginTop: "8px" }}>
         <span>
-          <ImgCustom src={`http://localhost:3060/${v.User.profile}`} />
+          <ImgCustom
+            src={`http://localhost:3060/${v.User && v.User.profile}`}
+          />
         </span>
         <span
           style={{ fontWeight: "bold", color: "#202020", marginLeft: "5px" }}
         >
-          {v.User.userId}
+          {v.User && v.User.userId}
         </span>
         <span style={{ marginLeft: "4px" }}>{v.content}</span>
       </div>
