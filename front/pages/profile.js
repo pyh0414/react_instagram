@@ -51,13 +51,12 @@ const ImgCustom = styled.img`
 `;
 
 const Profile = () => {
+  const [postModal, setPostModal] = useState(false);
   const { user, followings, followers, posts } = useSelector(
     state => state.user
   );
-
-  const [postModal, setPostModal] = useState(false);
-
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch({
       type: LOAD_MY_POSTS_REQUEST
@@ -127,19 +126,18 @@ const Profile = () => {
           </Row>
         </UserInfo>
         <Row>
-          {posts &&
-            posts.map((v, i) => {
-              return (
-                <Col span={8} key={i} style={{ marginTop: "10px" }}>
-                  <div style={{ height: "250px" }}>
-                    <ImgCustom
-                      src={`http://localhost:3060/${v.Images[0].src}`}
-                      onClick={onOpenModal(v)}
-                    ></ImgCustom>
-                  </div>
-                </Col>
-              );
-            })}
+          {posts.map((v, i) => {
+            return (
+              <Col span={8} key={i} style={{ marginTop: "10px" }}>
+                <div style={{ height: "250px" }}>
+                  <ImgCustom
+                    src={`http://localhost:3060/${v.Images[0].src}`}
+                    onClick={onOpenModal(v)}
+                  ></ImgCustom>
+                </div>
+              </Col>
+            );
+          })}
         </Row>
         {postModal && <Post onCloseModal={onCloseModal} user={user} />}
       </Wrapper>
@@ -147,4 +145,7 @@ const Profile = () => {
   );
 };
 
+const Test = () => {
+  return <div>asd</div>;
+};
 export default Profile;
