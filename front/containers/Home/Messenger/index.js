@@ -23,39 +23,44 @@ const Messenger = () => {
   const { roomSocket } = useSelector(state => state.chat);
 
   useEffect(() => {
-    roomSocket.on("remove_room_success", roomId => {
-      dispatch({
-        type: REMOVE_ROOM_SUCCESS,
-        data: roomId
+    roomSocket &&
+      roomSocket.on("remove_room_success", roomId => {
+        dispatch({
+          type: REMOVE_ROOM_SUCCESS,
+          data: roomId
+        });
       });
-    });
 
-    roomSocket.on("make_room_success", room => {
-      const { id, name, master } = room;
-      dispatch({
-        type: MAKE_ROOM_SUCCESS,
-        data: { id, name, master }
+    roomSocket &&
+      roomSocket.on("make_room_success", room => {
+        const { id, name, master } = room;
+        dispatch({
+          type: MAKE_ROOM_SUCCESS,
+          data: { id, name, master }
+        });
       });
-    });
 
-    roomSocket.on("send_message_success", data => {
-      dispatch({
-        type: SEND_MESSAGE_SUCCESS,
-        data
+    roomSocket &&
+      roomSocket.on("send_message_success", data => {
+        dispatch({
+          type: SEND_MESSAGE_SUCCESS,
+          data
+        });
       });
-    });
 
-    roomSocket.on("enter_room_success", room => {
-      dispatch({
-        type: ENTER_ROOM_SUCCESS,
-        data: room
+    roomSocket &&
+      roomSocket.on("enter_room_success", room => {
+        dispatch({
+          type: ENTER_ROOM_SUCCESS,
+          data: room
+        });
       });
-    });
-    roomSocket.on("out_room_success", () => {
-      dispatch({
-        type: OUT_ROOM_SUCCESS
+    roomSocket &&
+      roomSocket.on("out_room_success", () => {
+        dispatch({
+          type: OUT_ROOM_SUCCESS
+        });
       });
-    });
   }, []);
 
   const { currentRoom } = useSelector(state => state.chat);
