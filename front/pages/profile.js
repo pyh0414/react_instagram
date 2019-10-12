@@ -103,12 +103,12 @@ const Profile = () => {
                 <span style={{ marginLeft: "10px" }}>{user && user.name}</span>
               </div>
 
-              <div>
+              {/* <div>
                 <Button style={{ marginTop: "10px" }}>
                   <Icon type="edit" />
                   개인정보 수정
                 </Button>
-              </div>
+              </div> */}
 
               <CustomUl>
                 <li>
