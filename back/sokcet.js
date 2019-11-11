@@ -1,5 +1,4 @@
 const socketIo = require("socket.io");
-const session = require("express-session");
 
 module.exports = (server, app) => {
   const io = socketIo(server);
