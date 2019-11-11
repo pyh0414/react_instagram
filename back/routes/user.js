@@ -151,7 +151,29 @@ router.get("/posts", isLoggedIn, async (req, res, next) => {
     const posts = await db.Post.findAll({
       where: {
         userId: req.user.id
-      }
+      },
+      include: [
+        {
+          model: db.User,
+          attributes: ["id", "userId", "profile"]
+        },
+        {
+          model: db.Image,
+          attributes: ["src"]
+        },
+        {
+          model: db.User,
+          through: "Like",
+          as: "Likers",
+          attributes: ["id", "userId", "profile"]
+        },
+        {
+          model: db.Comment,
+          attributes: ["id", "content"],
+          include: [{ model: db.User, attributes: ["userId", "profile"] }]
+        }
+      ],
+      order: [["createdAt", "desc"]]
     });
 
     res.json({ posts });
