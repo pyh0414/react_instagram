@@ -34,7 +34,6 @@ const Me = styled.div`
 
 const ChatItem = ({ item }) => {
 	const { user } = useSelector((state) => state.user);
-	console.log(item);
 	return (
 		<>
 			{user && user.id === item.User.id ? (
